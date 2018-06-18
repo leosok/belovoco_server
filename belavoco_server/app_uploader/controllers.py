@@ -28,7 +28,7 @@ from werkzeug import secure_filename
 
 from lib.upload_file import uploadfile
 
-from uploader_belovoco import save_file_to_db, remove_dead_files, remove_file_from_db
+from uploader_belavoco import save_file_to_db, remove_dead_files, remove_file_from_db
 
 
 
