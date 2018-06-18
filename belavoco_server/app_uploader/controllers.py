@@ -34,7 +34,7 @@ from uploader_belovoco import save_file_to_db, remove_dead_files, remove_file_fr
 
 
 ALLOWED_EXTENSIONS = set(['wav','ogg', 'mp3'])
-IGNORED_FILES = set(['.gitignore'])
+IGNORED_FILES = set(['.gitignore','.data'])
 
 
 def allowed_file(filename):
@@ -112,7 +112,7 @@ def upload():
 
         return simplejson.dumps({"files": file_display})
 
-    return redirect(url_for('index'))
+    return redirect(url_for('.index'))
 
 
 @app_uploader.route("/delete/<string:filename>", methods=['DELETE'])
