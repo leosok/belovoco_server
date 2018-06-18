@@ -23,19 +23,21 @@ def save_file_to_db(audiofile, request):
     try:
         
         audio_length = create_audio_decription(audiofile)
-        filesize = os.path.getsize(audiofile)       
+        file_size = os.path.getsize(audiofile)       
+        #create the URL
+        file_hash = hash_file(audiofile)
 
+        file_url = '{url}api/get/{hash}/play'.format(url=request.url_root, hash=file_hash)
 
-        
-        
         new_audiofile = Audiofile.create(
                     file_name = audiofile,
                     reader = request.form.get("reader"),
                     author=  request.form.get("author"),
                     title=   request.form.get("title"),
-                    file_size=filesize,
+                    file_size=file_size,
                     length = audio_length,
-                    hash = hash_file(audiofile)
+                    hash = file_hash,
+                    file_url = file_url
                 )    
 
         new_audiofile.save
