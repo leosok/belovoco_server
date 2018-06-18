@@ -49,7 +49,7 @@ def get_json(hash_value,action=None):
                 return send_file(file_path)
 
             else: 
-                return jsonify(data)
+                return json.dumps(data, indent=4, sort_keys=True, default=str)
 
         #except:
             #return json.dumps(False)    
