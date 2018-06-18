@@ -1,10 +1,16 @@
 # models.py
 import peewee
-
 import datetime
- 
-database = peewee.SqliteDatabase("uploads.db")
-BASE_FILES_URL = 'localhost:5000'
+
+import os
+from base_config import APP_ROOT
+
+DB_FILE = os.path.join(APP_ROOT, "uploads.db")
+database = peewee.SqliteDatabase(DB_FILE)
+
+print DB_FILE
+
+#BASE_FILES_URL = 'localhost:5000'
  
 
 class Audiofile(peewee.Model):

@@ -4,11 +4,7 @@ import os
 from belavoco_server.app_uploader.controllers import app_uploader
 from belavoco_server.api.controllers import api
 
-
-UPLOAD_FOLDER = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    '..',
-    'data')
+from base_config import APP_ROOT, UPLOAD_FOLDER
 
 app = Flask(__name__,
             instance_relative_config=True,
@@ -19,6 +15,7 @@ app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #Maximum Size:
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+app.config['APP_ROOT'] = APP_ROOT
 
 bootstrap = Bootstrap(app)
 
