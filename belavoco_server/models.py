@@ -27,12 +27,19 @@ class Audiofile(peewee.Model):
     file_size =  peewee.IntegerField()
     file_url  =  peewee.CharField(default='')
     hash = peewee.CharField(default=0)
-    #information_text  = TextField()
+    text_info  = peewee.TextField(default = '')
+    text_lang = peewee.CharField(default='de')
+    text_type = peewee.IntegerField(default=0)
+
     
 
     @staticmethod
     def get_by_hash(hash):
         return Audiofile.select().where(Audiofile.hash == hash).get()
+    
+    def get_text_type(self):
+        ttypes ["unknown","Prosa","Lyrik"]
+        return ttypes[self.text_type]
 
     class Meta:
         database = database
