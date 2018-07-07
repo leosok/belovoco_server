@@ -16,6 +16,8 @@ import json
 import simplejson
 import os
 
+import logging
+
 @api.route("/")
 def api_hello():
     return "Welcome to BeloVoco JSON-Api"
@@ -59,16 +61,17 @@ def get_json(hash_value,action=None):
 @api.route("/users/add", methods=['POST'])
 def set_user():
 
-    #print request.get_data()
+    
 
+    
     data = request.get_json(force=False, silent=False)
-    print data
+    app.logger.info(data)
 
     a_token = data['token']['value']
     a_username = data['user']['username']
 
-    print a_token
-    print a_username
+    """  print a_token
+    print a_username """
 
     user, created = User.get_or_create(
     token = a_token,
@@ -78,8 +81,8 @@ def set_user():
     jsondata = {}
     jsondata['did_exist'] = not created
 
-    print jsondata
-
+    app.logger.debug(jsondata)
+    
     return json.dumps(jsondata)
 
     '''user, created = User.get_or_create(
