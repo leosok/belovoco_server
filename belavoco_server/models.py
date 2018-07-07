@@ -55,7 +55,7 @@ class User(peewee.Model):
     ORM model Users table - right now only with little fields
     """
     username =  peewee.CharField()
-    token = peewee.CharField()
+    token = peewee.CharField(unique=True)
     time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
 
 

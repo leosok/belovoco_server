@@ -8,10 +8,10 @@ from flask import current_app as app
 from playhouse.shortcuts import model_to_dict
 
 
-from belavoco_server.models import Audiofile
+from belavoco_server.models import Audiofile, User
 
 from flask import jsonify
-from flask import send_file
+from flask import send_file,request
 import json
 import simplejson
 import os
@@ -55,7 +55,31 @@ def get_json(hash_value,action=None):
             #return json.dumps(False)    
         #There is a hash comming, we want a file
 
-
+#ToDo: this will only work it Users alows Push - i think!
 @api.route("/users/add", methods=['POST'])
 def set_user():
+    data = request.get_json(force=False, silent=False)
     
+    a_token = data['token']['value']
+    a_username = data['user']['username']
+
+    print a_token
+    print a_username
+
+    user, created = User.get_or_create(
+    token = a_token,
+    username = a_username,
+    defaults={'token':a_token,'username': a_username})
+   
+    jsondata = {}
+    jsondata['did_exist'] = not created
+
+    print jsondata
+
+    return json.dumps(jsondata)
+
+    '''user, created = User.get_or_create(
+        token= a_token,
+        username='',
+        defaults={'username': "leo-test"})
+    '''
