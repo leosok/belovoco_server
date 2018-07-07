@@ -24,7 +24,7 @@
   <div class="row">
     <!-- <div class="center-block"> -->
     <div class="col-md-12">
-      <div class="col-md-4 bg-success">col-4</div>
+      <div class="col-md-4"></div>
       <div class="col-md-4">
 
         <h1 class="text-center">BelaVoco</h1>
@@ -32,7 +32,7 @@
 
 
       </div>
-      <div class="col-md-4 bg-danger">col-3</div>
+      <div class="col-md-4"></div>
     </div>
 
   </div>
@@ -100,94 +100,26 @@
 </div>
 
 
-{% endblock %} 
+{% endblock %}
+
+
+
+
 
 {% block scripts %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ url_for('static', filename='js/vendor/jquery.ui.widget.js') }}"></script>
-<!-- The Templates plugin is included to render the upload/download listings -->
-<!-- <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script> -->
-<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<!-- <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script> -->
-<!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<!-- <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script> -->
-<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script> -->
-<!-- blueimp Gallery script -->
-<!-- <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script> -->
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-
 <script src="{{ url_for('static', filename='js/jquery.iframe-transport.js') }} "></script>
 <!-- The basic File Upload plugin -->
 <script src="{{ url_for('static', filename='js/jquery.fileupload.js') }}"></script>
-<!-- The File Upload processing plugin -->
-<!-- <script src="{{ url_for('static', filename='js/jquery.fileupload-process.js') }}"></script> -->
-<!-- The File Upload image preview & resize plugin -->
-<!-- <script src="{{ url_for('static', filename='js/jquery.fileupload-image.js') }}"></script> -->
-<!-- The File Upload audio preview plugin -->
-<!-- <script src="{{ url_for('static', filename='js/jquery.fileupload-audio.js') }}"></script> -->
-<!-- The File Upload video preview plugin -->
-<!-- <script src="{{ url_for('static', filename='js/jquery.fileupload-video.js') }}"></script> -->
-<!-- The File Upload validation plugin -->
-<!-- <script src="{{ url_for('static', filename='js/jquery.fileupload-validate.js') }}"></script> -->
-<!-- The File Upload user interface plugin -->
-<!-- <script src="{{ url_for('static', filename='js/jquery.fileupload-ui.js') }}"></script> -->
-<!-- The main application script -->
-<!-- <script src="{{ url_for('static', filename='js/main_fp.js') }}"></script> -->
-<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
-<!--[if (gte IE 8)&(lt IE 10)]>
-<script src="js/cors/jquery.xdr-transport.js"></script>
-<![endif]-->
 
 
 
+<!-- Loading our belavoce Javascript - include, so it can be parsed -->
 <script>
-
-$(function () {
-  'use strict';
-  // Change this to the location of your server-side upload handler:
-  
-  console.log("I was fired once...");
-  var url = 'http://'+window.location.host + '{{ upload_url }}';
-  var formData;
-  console.log(url);
- 
-
-  $('#fileupload1').fileupload({  
-      
-      url: url,
-      dataType: 'json',
-      change: function (e, data) {
-        $.each(data.files, function (index, file) {
-            //alert('Selected file: ' + file.name);
-            data.formData = $('form').serializeArray();
-        })
-      },        
-      done: function (e, data) {
-        console.log("Upload finished!"); 
-        //console.log($('form').serializeArray())
-
-          $.each(data.result.files, function (index, file) {
-              $('<p/>').text(file.name).appendTo('#files');
-          });
-      },
-      progressall: function (e, data) {
-          var progress = parseInt(data.loaded / data.total * 100, 10);
-          $('#progress .progress-bar').css(
-              'width',
-              progress + '%'
-          );
-      }
-  }).prop('disabled', !$.support.fileInput)
-      .parent().addClass($.support.fileInput ? undefined : 'disabled');
-});
+  {% include 'belavoco_fileupload.js' %}
 </script>
 
 {% endblock %} 
-
-{% raw %}
-{% endraw %}
-
-
 

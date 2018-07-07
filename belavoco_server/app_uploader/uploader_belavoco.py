@@ -9,9 +9,6 @@ from mutagen.mp3 import MP3
 from belavoco_server.models import Audiofile
 from file_hashing import hash_file
 
-from belavoco_server.base_config import ALLOW_SAME_FILE
-
-
 def create_audio_decription(audiofile):
     try:
         audio = MP3(audiofile)
