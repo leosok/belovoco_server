@@ -5,6 +5,8 @@ import datetime
 import os
 from base_config import APP_ROOT
 
+import sys
+
 DB_FILE_UPLOADS = os.path.join(APP_ROOT, "uploads.db")
 DB_FILE_USERS = os.path.join(APP_ROOT, "users.db")
 

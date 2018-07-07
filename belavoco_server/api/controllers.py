@@ -1,3 +1,4 @@
+from __future__ import print_function
 from flask import Blueprint
 
 # BLUEPRINT #####################
@@ -14,7 +15,8 @@ from flask import jsonify
 from flask import send_file,request
 import json
 import simplejson
-import os
+import os, sys
+
 
 import logging
 
@@ -65,7 +67,8 @@ def set_user():
 
     
     data = request.get_json(force=False, silent=False)
-    app.logger.info(data)
+    app.logger.error(data)
+    print('debug info', file=sys.stderr)
 
     a_token = data['token']['value']
     a_username = data['user']['username']
