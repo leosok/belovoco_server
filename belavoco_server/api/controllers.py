@@ -58,8 +58,12 @@ def get_json(hash_value,action=None):
 #ToDo: this will only work it Users alows Push - i think!
 @api.route("/users/add", methods=['POST'])
 def set_user():
+
+    #print request.get_data()
+
     data = request.get_json(force=False, silent=False)
-    
+    print data
+
     a_token = data['token']['value']
     a_username = data['user']['username']
 
