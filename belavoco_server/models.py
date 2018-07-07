@@ -31,7 +31,7 @@ class Audiofile(peewee.Model):
     times_played = peewee.IntegerField(default=0)
     file_size =  peewee.IntegerField()
     file_url  =  peewee.CharField(default='')
-    hash = peewee.CharField(default=0)
+    hash = peewee.CharField(default=0, unique=True)
     text_info  = peewee.TextField(default = '')
     text_lang = peewee.CharField(default='de')
     text_type = peewee.IntegerField(default=0)

@@ -29,6 +29,8 @@ def save_file_to_db(audiofile, request):
 
         file_url = '{url}api/get/{hash}/play'.format(url=request.url_root, hash=file_hash)
 
+        print request.form.get("reader")
+
         new_audiofile = Audiofile.create(
                     file_name = audiofile,
                     reader = request.form.get("reader"),
