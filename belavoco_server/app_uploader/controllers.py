@@ -81,11 +81,8 @@ def upload():
                 uploaded_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 files.save(uploaded_file_path)
 
-                '''
-                # create thumbnail after saving
-                if mime_type.startswith('image'):
-                    create_thumbnail(filename)
-                '''
+                # get file size after saving
+                size = os.path.getsize(uploaded_file_path)
 
                 # IF AUDIO
                 if mime_type.startswith('audio'):
@@ -93,11 +90,6 @@ def upload():
                     save_file_to_db(uploaded_file_path, request)
                                   
                 
-                # get file size after saving
-                size = os.path.getsize(uploaded_file_path)
-
-               
-
                 # return json for js call back
                 result = uploadfile(name=filename, type=mime_type, size=size)
             
