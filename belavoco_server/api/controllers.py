@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from flask import Blueprint
 
 # BLUEPRINT #####################
@@ -12,7 +12,7 @@ from playhouse.shortcuts import model_to_dict
 from belavoco_server.models import Audiofile, User
 
 from flask import jsonify
-from flask import send_file,request
+from flask import send_file, request
 import json
 import simplejson
 import os, sys
@@ -70,13 +70,18 @@ def set_user():
 
     
 
-    
-    data = request.get_json(force=False, silent=False)
-    app.logger.error(data)
-    print('debug info', file=sys.stderr)
+    #This was not working due to a BUG on PythonAnywhere
+    #data = request.get_json(force=False, silent=False)
+     
+    #Was replaced by:
+    data2=request.get_data()
+    data_parsed = json.loads(data2)
 
-    a_token = data['token']['value']
-    a_username = data['user']['username']
+    app.logger.info(data_parsed)
+    #print('debug info', file=sys.stderr)
+
+    a_token = data_parsed['token']['value']
+    a_username = data_parsed['user']['username']
 
     """  print a_token
     print a_username """
