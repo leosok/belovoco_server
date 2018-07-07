@@ -28,7 +28,7 @@ def main():
 
 @app.route("/fp", methods=['GET'])
 def new_upload():
-    return render_template('main_upload.html')
+    return render_template('main_upload.html', upload_url='/file-panel/upload')
 
 
 @app.route("/upload", methods=['GET, POST'])

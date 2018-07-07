@@ -1,4 +1,12 @@
 {% extends "bootstrap/base.html" %} {% block title %}BelaVoco{% endblock %} {% block head %} {{ super() }}
+
+
+<!-- ++++++++++++++++++  -->
+<!-- "upload URL is currently file-panel/upload"  -->
+<!-- needes to be changed in FORM-Action and in JAVASCRIPT var url  -->
+<!-- ++++++++++++++++++  -->
+
+
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
@@ -29,7 +37,7 @@
 
   </div>
 
-  <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
+  <form id="fileupload" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
     <div class="form-group row">
       <div class="form-group">
         <!-- <div class="col-md-12 text-center">   -->
@@ -74,7 +82,7 @@
           <i class="glyphicon glyphicon-plus"></i>
           <span>Select files...</span>
           <!-- The file input field used as target for the file upload widget -->
-          <input id="fileupload1" type="file" name="files[]" multiple>
+          <input id="fileupload1" type="file" name="file">
         </span>
         <br>
         <br>
@@ -134,21 +142,24 @@
 
 
 
-{ % raw %}
-
 <script>
 
 $(function () {
   'use strict';
   // Change this to the location of your server-side upload handler:
   
-  console.log("i should be working....");
-  var url = window.location.hostname === 'blueimp.github.io' ?
-              '//jquery-file-upload.appspot.com/' : '/upload';
-  $('#fileupload1').fileupload({
-      url: url,
+  console.log("I was fired once...");
+  var url = 'http://'+window.location.host + '{{ upload_url }}';
+  console.log(url);
+
+  $('#fileupload1').fileupload({  
+      
+    url: url,
+    formData: $('form').serializeArray(),
       dataType: 'json',
       done: function (e, data) {
+        console.log("Upload finished!"); 
+         console.log (formData);
           $.each(data.result.files, function (index, file) {
               $('<p/>').text(file.name).appendTo('#files');
           });
@@ -164,8 +175,11 @@ $(function () {
       .parent().addClass($.support.fileInput ? undefined : 'disabled');
 });
 </script>
-{ % endraw %}
+
+{% endblock %} 
+
+{% raw %}
+{% endraw %}
 
 
 
-{% endblock %}

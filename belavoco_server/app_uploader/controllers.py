@@ -60,8 +60,13 @@ def gen_file_name(filename):
 
 @app_uploader.route("/upload", methods=['GET', 'POST'])
 def upload():
+
+    #print(request.get_data())
+
     if request.method == 'POST':
         files = request.files['file']
+        
+        
 
         if files:
             filename = secure_filename(files.filename)
