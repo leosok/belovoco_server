@@ -22,11 +22,11 @@ bootstrap = Bootstrap(app)
 app.register_blueprint(app_uploader, url_prefix='/file-panel')
 app.register_blueprint(api, url_prefix='/api')
 
-@app.route("/", methods=['GET'])
+@app.route("/file-panel", methods=['GET'])
 def main():
     return redirect(url_for('app_uploader.index'))
 
-@app.route("/fp", methods=['GET'])
+@app.route("/", methods=['GET'])
 def new_upload():
     return render_template('main_upload.html', upload_url='/file-panel/upload')
 
