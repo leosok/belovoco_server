@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, request
 from flask_bootstrap import Bootstrap
 import os
 from belavoco_server.app_uploader.controllers import app_uploader
@@ -29,3 +29,8 @@ def main():
 @app.route("/fp", methods=['GET'])
 def new_upload():
     return render_template('main_upload.html')
+
+
+@app.route("/upload", methods=['GET, POST'])
+def go_up():
+    return redirect(url_for('app_uploader.upload'))

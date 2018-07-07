@@ -54,3 +54,8 @@ def get_json(hash_value,action=None):
         #except:
             #return json.dumps(False)    
         #There is a hash comming, we want a file
+
+
+@api.route("/users/add", methods=['POST'])
+def set_user():
+    

@@ -5,10 +5,13 @@ import datetime
 import os
 from base_config import APP_ROOT
 
-DB_FILE = os.path.join(APP_ROOT, "uploads.db")
-database = peewee.SqliteDatabase(DB_FILE)
+DB_FILE_UPLOADS = os.path.join(APP_ROOT, "uploads.db")
+DB_FILE_USERS = os.path.join(APP_ROOT, "users.db")
 
-print DB_FILE
+database_uploads = peewee.SqliteDatabase(DB_FILE_UPLOADS)
+database_users   = peewee.SqliteDatabase(DB_FILE_USERS)
+
+print DB_FILE_UPLOADS
 
 #BASE_FILES_URL = 'localhost:5000'
  
@@ -42,11 +45,34 @@ class Audiofile(peewee.Model):
         return ttypes[self.text_type]
 
     class Meta:
-        database = database
+        database = database_uploads
  
+
+
+
+class User(peewee.Model):
+    """
+    ORM model Users table - right now only with little fields
+    """
+    username =  peewee.CharField()
+    token = peewee.CharField()
+    time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
+
+
+    class Meta:
+        database = database_users
+ 
+
+
  
 if __name__ == "__main__":
     try:
         Audiofile.create_table()
+        print "created Audiofil table"
     except peewee.OperationalError:
         print "Audiofile table already exists!"
+    try:
+        User.create_table()
+        print "Created User table"
+    except peewee.OperationalError:
+        print "User table already exists!"
