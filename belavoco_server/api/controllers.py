@@ -60,6 +60,11 @@ def get_json(hash_value,action=None):
         #There is a hash comming, we want a file
 
 #ToDo: this will only work it Users alows Push - i think!
+
+@api.route("/users/<something>", methods=['GET'])
+def user_stub(something):
+    return "this is user API"
+
 @api.route("/users/add", methods=['POST'])
 def set_user():
 
