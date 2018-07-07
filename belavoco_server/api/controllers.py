@@ -74,14 +74,10 @@ def set_user():
     #data = request.get_json(force=False, silent=False)
      
     #Was replaced by:
-    data2=request.get_data()
-    data_parsed = json.loads(data2)
+    data2=request.json.get('token')
 
-    app.logger.info(data_parsed)
-    #print('debug info', file=sys.stderr)
-
-    a_token = data_parsed['token']['value']
-    a_username = data_parsed['user']['username']
+    a_token = request.json.get('token')['value']
+    a_username = request.json.get('user')['username']
 
     """  print a_token
     print a_username """
