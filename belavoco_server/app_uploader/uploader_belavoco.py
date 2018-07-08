@@ -8,6 +8,8 @@ import peewee
 from mutagen.mp3 import MP3
 from belavoco_server.models import Audiofile
 from file_hashing import hash_file
+from send_pushnotification import push_gun
+
 
 def create_audio_decription(audiofile):
     try:
@@ -46,6 +48,8 @@ def save_file_to_db(audiofile, request):
     
         
             new_audiofile.save
+
+            push_gun(new_audiofile)
         
         except peewee.IntegrityError as e:
             print e
