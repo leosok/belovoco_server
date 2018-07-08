@@ -17,7 +17,13 @@ $(function () {
               //alert('Selected file: ' + file.name);
               data.formData = $('form').serializeArray();
           })
-        },        
+        },  
+        drop: function (e, data) {
+            $.each(data.files, function (index, file) {
+                console.log('Dropped file: ' + file.name);
+                data.formData = $('form').serializeArray();
+            });
+        },      
         done: function (e, data) {
           //console.log("Upload finished!"); 
           //console.log($('form').serializeArray())

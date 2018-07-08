@@ -48,6 +48,7 @@ def save_file_to_db(audiofile, request):
             new_audiofile.save
         
         except peewee.IntegrityError as e:
+            print e
             print "Audiofile Hash is a duplicate!"
             print "Deleting %s" % audiofile
             os.remove(audiofile)
