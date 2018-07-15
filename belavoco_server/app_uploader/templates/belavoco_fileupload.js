@@ -6,8 +6,8 @@ $(function () {
     var url = 'http://'+window.location.host + '{{ upload_url }}';
     var formData;
     console.log(url);
-   
   
+
     $('#fileupload1').fileupload({  
         
         url: url,

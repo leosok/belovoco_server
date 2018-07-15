@@ -10,11 +10,18 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 
+<!--  Modal Video -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal-video.min.css') }}"> 
+
 <!-- Generic page styles -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 <!-- blueimp Gallery styles -->
 <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+
+<!-- Bootstrap Glyphicons-->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
 
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fileupload.css') }}">
@@ -32,7 +39,13 @@
 
 
       </div>
-      <div class="col-md-4"></div>
+      <div style="padding:20px" class="col-md-4" >
+          <span style= "margin:auto" class="glyphicons glyphicons-microphone" ></span>
+          <a href="#" class="btn btn-danger btn-lg js-video-button" data-video-id='PL_R95CAufNZ_YOg6czP415_1YLn2J5HQo'>
+              <span class="glyphicon glyphicon-record"></span> Wie Aufnehmen?
+          </a>
+
+      </div>
     </div>
 
   </div>
@@ -71,6 +84,9 @@
             <label for="lr">Lyrik</label>
           </fieldset>
         </div>
+      
+
+
       </div>
     </div>
  </form>
@@ -83,6 +99,10 @@
           <span>Select files...</span>
           <!-- The file input field used as target for the file upload widget -->
           <input id="fileupload1" type="file" name="file">
+
+         
+          
+
         </span>
         <br>
         <br>
@@ -114,10 +134,16 @@
 <!-- The basic File Upload plugin -->
 <script src="{{ url_for('static', filename='js/jquery.fileupload.js') }}"></script>
 
+<script src="{{ url_for('static', filename='js/jquery.modal-video.min.js') }}"></script>
+
+
+
+
 
 
 <!-- Loading our belavoce Javascript - include, so it can be parsed -->
 <script>
+  {% include 'belavoco_video_tut.js' %}
   {% include 'belavoco_fileupload.js' %}
 </script>
 
