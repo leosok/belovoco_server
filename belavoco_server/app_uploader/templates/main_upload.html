@@ -96,22 +96,28 @@
         <!-- The fileinput-button span is used to style the file input field as button -->
         <span class="btn btn-success fileinput-button">
           <i class="glyphicon glyphicon-plus"></i>
-          <span>Select files...</span>
+          <span>Select files...</span>          
           <!-- The file input field used as target for the file upload widget -->
           <input id="fileupload1" type="file" name="file">
-
-         
-          
-
         </span>
+        <button type="button" class="upload_button btn btn-primary">Upload</button>
         <br>
-        <br>
+        <div id="files" class="files ">
+          <br>
+        </div>
+        
         <!-- The global progress bar -->
         <div id="progress" class="progress">
           <div class="progress-bar progress-bar-success"></div>
+         
         </div>
-        <!-- The container for the uploaded files -->
-        <div id="files" class="files"></div>
+        <!-- The container for the uploaded files -->        
+       
+        
+        
+        </span>
+        
+
       </div>
     </div>
 
@@ -142,10 +148,17 @@
 
 
 <!-- Loading our belavoce Javascript - include, so it can be parsed -->
+
 <script>
-  {% include 'belavoco_video_tut.js' %}
-  {% include 'belavoco_fileupload.js' %}
+
+/* eslint-disable */
+{% include 'belavoco_video_tut.js' %}  /*eslint-disable*/
+{% include 'belavoco_fileupload.js' %}  /*eslint-disable*/
+
+/* eslint-enable */
+
 </script>
+
 
 {% endblock %} 
 
