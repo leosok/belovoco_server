@@ -25,7 +25,7 @@ $(function () {
               console.log('Selected file: ' + file.name);
               $('.upload_button').prop('disabled', false);
               
-              //data.formData = $('form').serializeArray();           
+              data.formData = $('form').serializeArray();           
 
               data.context = $('.upload_button')
                 .click(function () {

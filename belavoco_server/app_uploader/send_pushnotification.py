@@ -13,9 +13,11 @@ from belavoco_server.models import Audiofile, User
 def push_gun(audiofile):
 
     message = "{} von {} wurde hochgeladen! Gelesen hat {}.".format(audiofile.title, audiofile.author, audiofile.reader)
-    for user in User.select():        
+    print message
+    #This function is not used, because Expo was dropped. It is still here as a starting point for notifications.   
+    ''' for user in User.select():        
         send_push_message(user.token, message)
-
+    '''
 
 # Basic arguments. You should extend this function with the push features you
 # want to use, or simply pass in a `PushMessage` object.
