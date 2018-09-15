@@ -29,12 +29,14 @@ class Audiofile(peewee.Model):
     upload_time = peewee.DateTimeField(default=datetime.datetime.now)
     length = peewee.CharField()
     times_played = peewee.IntegerField(default=0)
+    times_liked = peewee.IntegerField(default=0)
     file_size =  peewee.IntegerField()
     file_url  =  peewee.CharField(default='')
     hash = peewee.CharField(default=0, unique=True)
     text_info  = peewee.TextField(default = '')
     text_lang = peewee.CharField(default='de')
     text_type = peewee.IntegerField(default=0)
+    
 
     
 

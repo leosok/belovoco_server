@@ -31,7 +31,7 @@ def get_json(hash_value,action=None):
     if hash_value == 'all':
 
         all_records = []
-        for a in Audiofile.select():
+        for a in Audiofile.select().order_by(Audiofile.upload_time):
             a_dict = model_to_dict(a)
             all_records.append(a_dict)
         
@@ -60,6 +60,24 @@ def get_json(hash_value,action=None):
         #There is a hash comming, we want a file
 
 #ToDo: this will only work it Users alows Push - i think!
+
+@api.route('/set/<string:hash_value>/<string:action>', methods=['GET'])
+def set_like(hash_value,action=None):
+    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    if action == 'like':
+        #Add +1 to the Play Counter:
+        this_audio.times_liked += 1
+        this_audio.save()
+    
+    if action == 'unlike':
+        #Add +1 to the Play Counter:
+        this_audio.times_liked += 1
+        this_audio.save()
+
+    data = model_to_dict (this_audio)
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
+
+
 
 @api.route("/users/<something>", methods=['GET'])
 def user_stub(something):
