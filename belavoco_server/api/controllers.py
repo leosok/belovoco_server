@@ -65,14 +65,15 @@ def get_json(hash_value,action=None):
 def set_like(hash_value,action=None):
     this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
     if action == 'like':
-        #Add +1 to the Play Counter:
+        
         this_audio.times_liked += 1
         this_audio.save()
     
     if action == 'unlike':
-        #Add +1 to the Play Counter:
-        this_audio.times_liked += 1
-        this_audio.save()
+       
+        if this_audio.times_liked > 0:
+            this_audio.times_liked -= 1
+            this_audio.save()
 
     data = model_to_dict (this_audio)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
