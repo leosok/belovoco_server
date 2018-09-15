@@ -31,7 +31,7 @@ def get_json(hash_value,action=None):
     if hash_value == 'all':
 
         all_records = []
-        for a in Audiofile.select().order_by(Audiofile.upload_time):
+        for a in Audiofile.select().order_by(Audiofile.upload_time.desc()):
             a_dict = model_to_dict(a)
             all_records.append(a_dict)
         
