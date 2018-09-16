@@ -12,13 +12,52 @@ from playhouse.shortcuts import model_to_dict
 from belavoco_server.models import Audiofile, User
 
 from flask import jsonify
-from flask import send_file, request
+from flask import send_file, request, Response
 import json
 import simplejson
 import os, sys
+import re
+import mimetypes
 
 
 import logging
+
+def play_seeking(path, the_request):
+
+    range_header = the_request.headers.get('Range', None)
+    print the_request.headers
+    if not range_header:
+        print "just sending a file"
+        return send_file(path)
+    else:
+        size = os.path.getsize(path)
+        byte1, byte2 = 0, None
+
+        m = re.search('(\d+)-(\d*)', range_header)
+        g = m.groups()
+
+        if g[0]: byte1 = int(g[0])
+        if g[1]: byte2 = int(g[1])
+
+        length = size - byte1
+        if byte2 is not None:
+            length = byte2 + 1 - byte1
+
+        data = None
+        with open(path, 'rb') as f:
+            f.seek(byte1)
+            data = f.read(length)
+
+        print "Creating a 206!"
+
+        rv = Response(data,
+            206,
+            mimetype=mimetypes.guess_type(path)[0],
+            direct_passthrough=True)
+        rv.headers.add('Content-Range', 'bytes {0}-{1}/{2}'.format(byte1, byte1 + length - 1, size))
+        return rv
+
+
 
 @api.route("/")
 def api_hello():
@@ -50,7 +89,8 @@ def get_json(hash_value,action=None):
                 
                 #Create path & send the file to User
                 file_path = os.path.join(app.root_path,'..',this_audio.file_name)
-                return send_file(file_path)
+                return play_seeking(file_path,request)
+               
 
             else: 
                 return json.dumps(data, indent=4, sort_keys=True, default=str)
