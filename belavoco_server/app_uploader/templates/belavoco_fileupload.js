@@ -25,10 +25,13 @@ $(function () {
               console.log('Selected file: ' + file.name);
               $('.upload_button').prop('disabled', false);
               
-              data.formData = $('form').serializeArray();           
+                       
 
               data.context = $('.upload_button')
                 .click(function () {
+                    data.formData = $('form').serializeArray(); 
+                    console.log(data);
+
                     data.context.text('Uploading...');
                     data.submit();
                 });
