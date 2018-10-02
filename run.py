@@ -4,8 +4,14 @@
 from belavoco_server import app
 
 
+<<<<<<< Updated upstream
 if __name__ == '__main__':
-    app.run(debug=True,host= '0.0.0.0')
+=======
+if __name__ == '__main__':   
+    
+
+>>>>>>> Stashed changes
+    app.run(debug=True,host= 'localhost')
     
     #remove_dead_files(app.config['UPLOAD_FOLDER'])
     
