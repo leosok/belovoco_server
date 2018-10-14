@@ -5,19 +5,20 @@ import datetime
 import os
 from base_config import APP_ROOT
 
-import flask_admin as admin
-from flask_admin.contrib.peewee import ModelView
-from flask_security import current_user, login_required, RoleMixin, Security, \
-    PeeweeUserDatastore, UserMixin, utils
-from flask_login import login_manager
+#import flask_admin as admin
+#from flask_admin.contrib.peewee import ModelView
+#from flask_security import current_user, login_required, RoleMixin, Security, \
+#    PeeweeUserDatastore, UserMixin, utils
+#from flask_login import login_manager
 
 import sys
 #### LOGIN
-from flask_login import AnonymousUserMixin
+""" from flask_login import AnonymousUserMixin
 class Anonymous(AnonymousUserMixin):
   def __init__(self):
     self.username = 'Guest'
-##### END OF LOGIN
+ """
+ ##### END OF LOGIN
 
 
 DB_FILE_UPLOADS = os.path.join(APP_ROOT, "uploads.db")
@@ -72,9 +73,9 @@ class User(peewee.Model):
     ORM model Users table - right now only with little fields
     """
     
-    user_email = peewee.CharField(unique=True),
-    user_name = peewee.CharField(),
-    hash = peewee.CharField(),
+    user_email = peewee.CharField(unique=True)
+    user_name = peewee.CharField()
+    hash = peewee.CharField(unique=True)
     time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
 
 
@@ -88,7 +89,7 @@ from flask_admin.contrib.peewee import ModelView
 
 class UserAdmin(ModelView):
     column_exclude_list = ['']
-    #column_searchable_list = ('user_email',)
+    column_searchable_list = ('user_email',)
     #column_filters = ('user_email',)
 
     '''
@@ -110,6 +111,12 @@ class AudioAdmin(ModelView):
     '''
 
 if __name__ == "__main__":
+
+    import logging
+    logger = logging.getLogger('peewee')
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
+
     try:
         Audiofile.create_table()
         print "Created Audiofil table"
