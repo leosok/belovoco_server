@@ -35,12 +35,22 @@ app.register_blueprint(api, url_prefix='/api')
 # Activating Flask-Admin:
 
    
-admin = admin.Admin(app, name='BelaVoco Admin')
+
+
+import user_managment
+
+# Create admin
+admin = admin.Admin(app, 'Example: Auth', index_view=user_managment.MyAdminIndexView(), base_template='my_master.html')
+
+# Add view
+#admin.add_view(MyModelView(User, db.session))
+#admin = admin.Admin(app, name='BelaVoco Admin')
 admin.add_view(UserAdmin(User))   
 admin.add_view(AudioAdmin(Audiofile)) 
 
+
 from os import path as op
-admin.add_view(FileAdmin(app.config['UPLOAD_FOLDER'], name='Files'))   
+#admin.add_view(FileAdmin(app.config['UPLOAD_FOLDER'], name='Files'))   
 
 # End of Flask-Admin
 

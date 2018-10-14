@@ -8,16 +8,17 @@ from flask_admin.contrib import sqla
 from flask_admin import helpers, expose
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from belavoco_server import app
 
 # Create Flask application
-app = Flask(__name__)
+#app = Flask(__name__)
 
 # Create dummy secrey key so we can use sessions
-app.config['SECRET_KEY'] = '123456790'
+#app.config['SECRET_KEY'] = '123456790'
 
 # Create in-memory database
-app.config['DATABASE_FILE'] = 'sample_db.sqlite'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + app.config['DATABASE_FILE']
+app.config['DATABASE_FILE1'] = 'sample_db_athens.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + app.config['DATABASE_FILE1']
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
@@ -124,7 +125,10 @@ class MyAdminIndexView(admin.AdminIndexView):
             return redirect(url_for('.index'))
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
         self._template_args['form'] = form
-        self._template_args['link'] = link
+        # LEO #####
+        # USER SHOULD NOT BE ABLE TO REGISTER! : 
+        #self._template_args['link'] = link
+        
         return super(MyAdminIndexView, self).index()
 
     @expose('/register/', methods=('GET', 'POST'))
@@ -164,10 +168,10 @@ def index():
 init_login()
 
 # Create admin
-admin = admin.Admin(app, 'Example: Auth', index_view=MyAdminIndexView(), base_template='my_master.html')
+#admin = admin.Admin(app, 'Example: Auth', index_view=MyAdminIndexView(), base_template='my_master.html')
 
 # Add view
-admin.add_view(MyModelView(User, db.session))
+#admin.add_view(MyModelView(User, db.session))
 
 
 def build_sample_db():
