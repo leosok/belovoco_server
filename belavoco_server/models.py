@@ -36,6 +36,7 @@ class Audiofile(peewee.Model):
     """
     ORM model of album table
     """
+    author = peewee.CharField()
     file_name =  peewee.CharField()
     reader = peewee.CharField()
     title  = peewee.CharField()
