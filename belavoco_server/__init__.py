@@ -33,30 +33,22 @@ app.register_blueprint(api, url_prefix='/api')
 
 
 # Activating Flask-Admin:
-
-   
-
-
-import user_managment
+# This is the simple Admin Version!
 
 # Create admin
-admin = admin.Admin(app, 'Example: Auth', index_view=user_managment.MyAdminIndexView(), base_template='my_master.html')
+admin = admin.Admin(app, 'BV Simple', url='/admin/2030784/')
 
 # Add view
 #admin.add_view(MyModelView(User, db.session))
 #admin = admin.Admin(app, name='BelaVoco Admin')
 admin.add_view(UserAdmin(User))   
 admin.add_view(AudioAdmin(Audiofile)) 
-
-
 from os import path as op
-#admin.add_view(FileAdmin(app.config['UPLOAD_FOLDER'], name='Files'))   
+admin.add_view(FileAdmin(app.config['UPLOAD_FOLDER'], name='Files'))   
+
+
 
 # End of Flask-Admin
-
-
-
-
 @app.route("/file-panel", methods=['GET'])
 def main():
     return redirect(url_for('app_uploader.index'))

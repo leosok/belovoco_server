@@ -87,22 +87,23 @@ class UserAdmin(ModelView):
     column_exclude_list = ['']
     column_searchable_list = ('username',)
     column_filters = ('username',)
-    
+    '''
     def is_accessible(self):
         if not current_user.is_authenticated:
             return False
         else:
             return True
-
+    '''
 
 class AudioAdmin(ModelView):
     column_exclude_list = [''] 
+    '''
     def is_accessible(self):
         if not current_user.is_authenticated:
             return False
         else:
             return True
-
+    '''
 
 if __name__ == "__main__":
     try:
