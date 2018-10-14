@@ -18,9 +18,11 @@ from belavoco_server.models import UserAdmin, User, AudioAdmin, Audiofile
 app = Flask(__name__,
             instance_relative_config=True,
             template_folder='templates') 
+            
+#loading instance config (sensitive!)
+app.config.from_pyfile('config.py')
 
 
-app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #Maximum Size:
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
@@ -36,7 +38,7 @@ app.register_blueprint(api, url_prefix='/api')
 # This is the simple Admin Version!
 
 # Create admin
-admin = admin.Admin(app, 'BV Simple', url='/admin/2030784/')
+admin = admin.Admin(app, 'BV Simple', url=app.config['ADMIN_URL'])
 
 # Add view
 #admin.add_view(MyModelView(User, db.session))
