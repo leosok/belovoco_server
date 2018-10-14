@@ -18,6 +18,7 @@ import simplejson
 import os, sys
 import re
 import mimetypes
+from werkzeug.security import generate_password_hash
 
 
 import logging
@@ -127,24 +128,27 @@ def user_stub(something):
 @api.route("/users/add", methods=['POST'])
 def set_user():
 
-    
-
     #This was not working due to a BUG on PythonAnywhere
     #data = request.get_json(force=False, silent=False)
      
     #Was replaced by:
-    data2=request.json.get('token')
+    data2 = request.json.get('user')
+    print data2
 
-    a_token = request.json.get('token')['value']
-    a_username = request.json.get('user')['username']
+    user_email = request.json.get('user')['useremail']
+    try:
+        user_name = request.json.get('user')['username']
+    except:
+        user_name = 'Noname'
 
-    """  print a_token
-    print a_username """
+    user_hash = generate_password_hash(user_email)
 
     user, created = User.get_or_create(
-    token = a_token,
-    username = a_username,
-    defaults={'token':a_token,'username': a_username})
+        user_email = user_email,
+        user_name = user_name,
+        user_hash = user_hash,
+        defaults={'user_email':user_email,'user_name': user_name, 'user_hash': user_hash}
+        )
    
     jsondata = {}
     jsondata['did_exist'] = not created
