@@ -148,6 +148,7 @@ def set_user():
    
     jsondata = {}
     jsondata['did_exist'] = not created
+    jsondata['user_hash'] = user_hash
 
     app.logger.debug(jsondata)
     
