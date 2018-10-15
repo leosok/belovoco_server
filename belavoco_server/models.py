@@ -77,7 +77,7 @@ class User(peewee.Model):
     user_name = peewee.CharField()
     hash = peewee.CharField()
     time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
-
+    player_id = peewee.CharField(default="0")
 
     class Meta:
         database = database_users
