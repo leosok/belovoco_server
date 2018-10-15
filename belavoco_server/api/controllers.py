@@ -69,6 +69,11 @@ def api_hello():
 @api.route('/get/<string:hash_value>/<string:action>', methods=['GET'])
 def get_json(hash_value,action=None):
   
+    print "***********" + "args + headers"
+    print request.args
+    print request.headers
+    print "***********" + "1hey"
+
     if hash_value == 'all':
 
         all_records = []
@@ -103,9 +108,14 @@ def get_json(hash_value,action=None):
 
 #ToDo: this will only work it Users alows Push - i think!
 
-@api.route('/set/<string:hash_value>/<string:action>', methods=['GET'])
+@api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST'])
 def set_like(hash_value,action=None):
     this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    
+    #I am getting a Post request with a UserHash
+    #TODO: Implement User-Model wich will get the likes instad of the audiofiles! 
+    print request.get_json()
+    
     if action == 'like':
         
         this_audio.times_liked += 1
