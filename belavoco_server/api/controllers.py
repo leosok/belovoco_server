@@ -23,6 +23,7 @@ from werkzeug.security import generate_password_hash
 
 import logging
 import hashlib
+from peewee import DoesNotExist
 
 def play_seeking(path, the_request):
 
@@ -60,6 +61,23 @@ def play_seeking(path, the_request):
         return rv
 
 
+def authorize_user_from_header(rq):
+    
+    try:
+        #Checking if there is a AUTH-Header, if not this will throw a KeyError
+        request_user_hash = rq.headers['Authorization']
+        try:
+            #Checking ig a user with this Hash exists, and returns it if found
+            this_user = User.select().where(User.hash == request_user_hash).get()
+            print "Authorized: %s" % this_user.user_email            
+            return this_user
+        except DoesNotExist:
+            print "User not found. Hash: '%s'" % request_user_hash
+            return False
+    except KeyError:   
+        print "Using old API, without Authorization-Header"
+        return False
+
 
 @api.route("/")
 def api_hello():
@@ -69,11 +87,8 @@ def api_hello():
 @api.route('/get/<string:hash_value>/<string:action>', methods=['GET'])
 def get_json(hash_value,action=None):
   
-    print "***********" + "args + headers"
-    print request.args
-    print request.headers
-    print "***********" + "1hey"
-
+    print authorize_user_from_header(request)
+   
     if hash_value == 'all':
 
         all_records = []
@@ -105,8 +120,6 @@ def get_json(hash_value,action=None):
         #except:
             #return json.dumps(False)    
         #There is a hash comming, we want a file
-
-#ToDo: this will only work it Users alows Push - i think!
 
 @api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST'])
 def set_like(hash_value,action=None):
