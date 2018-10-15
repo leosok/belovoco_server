@@ -33,8 +33,9 @@ app.config['APP_ROOT'] = APP_ROOT
 
 bootstrap = Bootstrap(app)
 
-app.register_blueprint(app_uploader, url_prefix='/file-panel')
 app.register_blueprint(api, url_prefix='/api')
+app.register_blueprint(app_uploader, url_prefix='/file-panel')
+
 
 
 # Activating Flask-Admin:

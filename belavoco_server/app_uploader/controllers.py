@@ -146,5 +146,5 @@ def get_file(filename):
 
 @app_uploader.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('uploader_index.html')
 
