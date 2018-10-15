@@ -22,6 +22,7 @@ from werkzeug.security import generate_password_hash
 
 
 import logging
+import hashlib
 
 def play_seeking(path, the_request):
 
@@ -136,18 +137,13 @@ def set_user():
     print data2
 
     user_email = request.json.get('user')['useremail']
-    try:
-        user_name = request.json.get('user')['username']
-    except:
-        user_name = 'Noname'
+    user_name = request.json.get('user')['username']
 
-    user_hash = generate_password_hash(user_email)
+    user_hash = hashlib.sha1(user_email).hexdigest()
 
     user, created = User.get_or_create(
         user_email = user_email,
-        user_name = user_name,
-        user_hash = user_hash,
-        defaults={'user_email':user_email,'user_name': user_name, 'user_hash': user_hash}
+        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash}
         )
    
     jsondata = {}

@@ -73,9 +73,9 @@ class User(peewee.Model):
     ORM model Users table - right now only with little fields
     """
     
-    user_email = peewee.CharField(unique=True)
+    user_email = peewee.CharField(primary_key=True)
     user_name = peewee.CharField()
-    hash = peewee.CharField(unique=True)
+    hash = peewee.CharField()
     time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
 
 
@@ -89,7 +89,7 @@ from flask_admin.contrib.peewee import ModelView
 
 class UserAdmin(ModelView):
     column_exclude_list = ['']
-    column_searchable_list = ('user_email',)
+    column_searchable_list = ('user_email','user_name')
     #column_filters = ('user_email',)
 
     '''

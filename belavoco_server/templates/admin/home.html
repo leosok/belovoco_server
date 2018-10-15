@@ -1,0 +1,20 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="jumbotron col-md-4">
+            <h1>{{users.select().count()}} Users</h1>
+            <hr class="my-4">
+            <p>Latest user: {{users.select().first()}}</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Show Users</a></p>
+        </div>
+<!-- 
+        <div class="jumbotron col-md-4 offset-md-4">
+            <h1>{{users.select().count()}} Users</h1>
+            <p>Latest user: {{users.select().first()}}</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Show Users</a></p>
+        </div> -->
+    </div>
+</div>
+    
+{% endblock %}

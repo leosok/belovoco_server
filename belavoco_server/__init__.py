@@ -12,6 +12,9 @@ from base_config import APP_ROOT, UPLOAD_FOLDER
 import flask_admin as admin
 
 from flask_admin.contrib.fileadmin import FileAdmin
+
+from flask_admin import Admin, AdminIndexView, expose
+
 from belavoco_server.models import UserAdmin, User, AudioAdmin, Audiofile
 
 
@@ -38,7 +41,21 @@ app.register_blueprint(api, url_prefix='/api')
 # This is the simple Admin Version!
 
 # Create admin
-admin = admin.Admin(app, 'BV Simple', url=app.config['ADMIN_URL'])
+
+
+class HomeView(AdminIndexView):
+    @expose("/")
+    def index(self):
+        return self.render('admin/home.html', users=User)
+
+admin = Admin(app, "BV Admin", 
+            index_view=HomeView(name='Home', menu_icon_type='glyph', menu_icon_value='glyphicon-home'),
+            url=app.config['ADMIN_URL'], 
+            template_mode='bootstrap3',
+            )
+
+
+#admin = admin.Admin(app, 'BV Admin', url=app.config['ADMIN_URL'])
 
 # Add view
 #admin.add_view(MyModelView(User, db.session))
