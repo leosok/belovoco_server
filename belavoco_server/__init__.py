@@ -49,9 +49,8 @@ class HomeView(AdminIndexView):
         return self.render('admin/home.html', users=User)
 
 admin = Admin(app, "BV Admin", 
-            index_view=HomeView(name='Home', menu_icon_type='glyph', menu_icon_value='glyphicon-home'),
-            url=app.config['ADMIN_URL'], 
-            template_mode='bootstrap3',
+            index_view=HomeView(name='Home1', menu_icon_type='glyph', menu_icon_value='glyphicon-home', url=app.config['ADMIN_URL']),       
+            template_mode='bootstrap3',  url=app.config['ADMIN_URL'],
             )
 
 

@@ -6,7 +6,7 @@
             <h1>{{users.select().count()}} Users</h1>
             <hr class="my-4">
             <p>Latest user: {{users.select().first()}}</p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">Show Users</a></p>
+            <p><a class="btn btn-primary btn-lg" href="{{url_for('user.index_view')}}" role="button">Show Users</a></p>
         </div>
 <!-- 
         <div class="jumbotron col-md-4 offset-md-4">
