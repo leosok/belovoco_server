@@ -1,20 +1,39 @@
-from exponent_server_sdk import DeviceNotRegisteredError
-from exponent_server_sdk import PushClient
-from exponent_server_sdk import PushMessage
-from exponent_server_sdk import PushResponseError
-from exponent_server_sdk import PushServerError
-from requests.exceptions import ConnectionError
-from requests.exceptions import HTTPError
-
 from belavoco_server.models import Audiofile, User
+from flask import current_app as app
+import onesignal as onesignal_sdk
+
+
+onesignal_client = onesignal_sdk.Client(
+                        user_auth_key=app.config['ONESIGNAL_USER_AUTH_KEY'],
+                        app={
+                            "app_auth_key": app.config['ONESIGNAL_APP_AUTH_KEY'],
+                            "app_id": app.config['ONESIGNAL_APP_ID']})
 
 
 #Will send a Push Notif to all users
 def push_gun(audiofile):
 
+
     message = "{} von {} wurde hochgeladen! Gelesen hat {}.".format(audiofile.title, audiofile.author, audiofile.reader)
     print message
-    #This function is not used, because Expo was dropped. It is still here as a starting point for notifications.   
-    ''' for user in User.select():        
-        send_push_message(user.token, message)
-    '''
+    
+    # create a notification
+    push_notification = onesignal_sdk.Notification(contents={"en": message})
+    push_notification.set_parameter("headings", {"en": "Neues Audio"})
+
+    #create array of devices to push to
+    target_devices_array = []
+    for user in User.select(User.player_id <> "0"):
+        target_devices_array.append(user.player_id)
+
+    print target_devices_array
+    push_notification.set_target_devices([target_devices_array])
+
+    # send notification, it will return a response
+    """ onesignal_response = onesignal_client.send_notification(push_notification)
+    print(onesignal_response.status_code)
+    print(onesignal_response.json()) """
+
+
+if __name__ == "__main__":
+    print "started"
