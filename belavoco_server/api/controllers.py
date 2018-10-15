@@ -127,8 +127,10 @@ def set_like(hash_value,action=None):
     
     #I am getting a Post request with a UserHash
     #TODO: Implement User-Model wich will get the likes instad of the audiofiles! 
-    print request.get_json()
-    
+    #print request.get_json()
+    print authorize_user_from_header(request)
+
+
     if action == 'like':
         
         this_audio.times_liked += 1
