@@ -69,7 +69,7 @@ def authorize_user_from_header(rq):
         try:
             #Checking ig a user with this Hash exists, and returns it if found
             this_user = User.select().where(User.hash == request_user_hash).get()
-            print "Authorized: %s" % this_user.user_email            
+            print "Authorized request: %s" % this_user.user_email            
             return this_user
         except DoesNotExist:
             print "User not found. Hash: '%s'" % request_user_hash
@@ -87,7 +87,7 @@ def api_hello():
 @api.route('/get/<string:hash_value>/<string:action>', methods=['GET'])
 def get_json(hash_value,action=None):
   
-    print authorize_user_from_header(request)
+    authorize_user_from_header(request)
    
     if hash_value == 'all':
 
@@ -128,7 +128,8 @@ def set_like(hash_value,action=None):
     #I am getting a Post request with a UserHash
     #TODO: Implement User-Model wich will get the likes instad of the audiofiles! 
     #print request.get_json()
-    print authorize_user_from_header(request)
+    
+    authorize_user_from_header(request)
 
 
     if action == 'like':
