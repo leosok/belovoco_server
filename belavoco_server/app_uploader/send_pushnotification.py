@@ -17,7 +17,7 @@ def push_gun(audiofile):
 
     onesignal_client = configure_onesignal()
 
-    message = "{} von {} wurde hochgeladen! Gelesen hat {}.".format(audiofile.title, audiofile.author, audiofile.reader)
+    message = u"{} von {} wurde hochgeladen! Gelesen hat {}.".format(audiofile.title, audiofile.author, audiofile.reader)
     print message
     
     # create a notification
