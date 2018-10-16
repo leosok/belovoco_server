@@ -162,14 +162,27 @@ def set_user():
     data2 = request.json.get('user')
     print data2
 
-    user_email = request.json.get('user')['useremail']
-    user_name = request.json.get('user')['username']
+    #This is a nicer try-except
+    if 'useremail' in request.json.get('user'):
+        user_email = request.json.get('user')['useremail']
+    else: user_email = 'none'
+
+    if 'username' in request.json.get('user'):
+        user_name = request.json.get('user')['username']
+    else: 
+        user_name ='Mustermann'
+    if 'playerid' in request.json.get('user'):
+        user_player_id = request.json.get('user')['playerid']
+    else: 
+        user_player_id ='0'
+
 
     user_hash = hashlib.sha1(user_email).hexdigest()
 
     user, created = User.get_or_create(
         user_email = user_email,
-        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash}
+        player_id = user_player_id,
+        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
         )
    
     jsondata = {}
