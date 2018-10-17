@@ -152,7 +152,7 @@ def set_like(hash_value,action=None):
 def user_update():
     
     print request.json
-    authorize_user_from_header(request)
+    #authorize_user_from_header(request)
 
     user_data = request.json.get('user')
 
@@ -174,15 +174,14 @@ def user_update():
     else:
         return abort(404)
 
-    #print User.select().where(User.hash == user_hash).get().user_email
-
     user_update = User.update({User.user_email: user_email,
                          User.user_name: user_name, 
                          User.player_id: user_player_id}).\
                         where(User.hash == user_hash ).\
                         execute()
     if user_update:
-        return "User updated!"
+        print "User was updated: " + User.select().where(User.hash == user_hash ).get().user_email
+        return "User updated!"        
     else:
         print "ERROR: Updating a User which does not exist"
         abort(404)
@@ -193,26 +192,22 @@ def user_stub():
     return "this is user API"
 
 @api.route("/user", methods=['POST'])
-def set_user():
-    
-#This was not working due to a BUG on PythonAnywhere
-#data = request.get_json(force=False, silent=False)
-    
-#Was replaced by:
-    data2 = request.json.get('user')
-    print data2
+def user_create():
+  
+    user_data = request.json.get('user')
+    print user_data
 
     #This is a nicer try-except
-    if 'useremail' in request.json.get('user'):
-        user_email = request.json.get('user')['useremail']
+    if 'useremail' in user_data:
+        user_email = user_data['useremail']
     else: user_email = 'none'
 
-    if 'username' in request.json.get('user'):
-        user_name = request.json.get('user')['username']
+    if 'username' in user_data:
+        user_name = user_data['username']
     else: 
         user_name ='Mustermann'
-    if 'onesignalid' in request.json.get('user'):
-        user_player_id = request.json.get('user')['onesignalid']
+    if 'onesignalid' in user_data:
+        user_player_id = user_data['onesignalid']
     else: 
         user_player_id ='0'
 
