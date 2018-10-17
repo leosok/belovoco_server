@@ -11,7 +11,7 @@ from playhouse.shortcuts import model_to_dict
 
 from belavoco_server.models import Audiofile, User
 
-from flask import jsonify
+from flask import jsonify, abort
 from flask import send_file, request, Response
 import json
 import simplejson
@@ -148,59 +148,93 @@ def set_like(hash_value,action=None):
 
 
 
-@api.route("/user/<something>", methods=['GET'])
-def user_stub(something):
+@api.route("/user", methods=['PUT'])
+def user_update():
+    
+    print request.json
+    authorize_user_from_header(request)
+
+    user_data = request.json.get('user')
+
+    #This is a nicer try-except
+    if 'useremail' in user_data:
+        user_email = user_data['useremail']
+    else: user_email = 'none'
+
+    if 'username' in user_data:
+        user_name = user_data['username']
+    else: 
+        user_name ='Mustermann'
+    if 'onesignalid' in user_data:
+        user_player_id = user_data['onesignalid']
+    else: 
+        user_player_id ='0'
+    if 'userhash' in user_data:
+        user_hash = user_data['userhash']
+    else:
+        return abort(404)
+
+    #print User.select().where(User.hash == user_hash).get().user_email
+
+    user_update = User.update({User.user_email: user_email,
+                         User.user_name: user_name, 
+                         User.player_id: user_player_id}).\
+                        where(User.hash == user_hash ).\
+                        execute()
+    if user_update:
+        return "User updated!"
+    else:
+        print "ERROR: Updating a User which does not exist"
+        abort(404)
+
+
+@api.route("/user", methods=['GET'])
+def user_stub():
     return "this is user API"
 
-@api.route("/user/add", methods=['POST','PUT'])
+@api.route("/user", methods=['POST'])
 def set_user():
     
-    if flask.request.method == 'PUT':
-        print "Updating User..."
-        return "User Updated"
-
+#This was not working due to a BUG on PythonAnywhere
+#data = request.get_json(force=False, silent=False)
     
-    if flask.request.method == 'POST':
-    #This was not working due to a BUG on PythonAnywhere
-    #data = request.get_json(force=False, silent=False)
-     
-    #Was replaced by:
-        data2 = request.json.get('user')
-        print data2
+#Was replaced by:
+    data2 = request.json.get('user')
+    print data2
 
-        #This is a nicer try-except
-        if 'useremail' in request.json.get('user'):
-            user_email = request.json.get('user')['useremail']
-        else: user_email = 'none'
+    #This is a nicer try-except
+    if 'useremail' in request.json.get('user'):
+        user_email = request.json.get('user')['useremail']
+    else: user_email = 'none'
 
-        if 'username' in request.json.get('user'):
-            user_name = request.json.get('user')['username']
-        else: 
-            user_name ='Mustermann'
-        if 'playerid' in request.json.get('user'):
-            user_player_id = request.json.get('user')['playerid']
-        else: 
-            user_player_id ='0'
+    if 'username' in request.json.get('user'):
+        user_name = request.json.get('user')['username']
+    else: 
+        user_name ='Mustermann'
+    if 'onesignalid' in request.json.get('user'):
+        user_player_id = request.json.get('user')['onesignalid']
+    else: 
+        user_player_id ='0'
 
 
-        user_hash = hashlib.sha1(user_email).hexdigest()
+    user_hash = hashlib.sha1(user_email).hexdigest()
 
-        user, created = User.get_or_create(
-            user_email = user_email,
-            player_id = user_player_id,
-            defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
-            )
+    user, created = User.get_or_create(
+        user_email = user_email,
+        player_id = user_player_id,
+        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
+        )
+
+    jsondata = {}
+    jsondata['did_exist'] = not created
+    jsondata['user_hash'] = user_hash
+
+    app.logger.debug(jsondata)
     
-        jsondata = {}
-        jsondata['did_exist'] = not created
-        jsondata['user_hash'] = user_hash
+    return json.dumps(jsondata)
 
-        app.logger.debug(jsondata)
-        
-        return json.dumps(jsondata)
-
-        '''user, created = User.get_or_create(
-            token= a_token,
-            username='',
-            defaults={'username': "leo-test"})
-        '''
+    '''user, created = User.get_or_create(
+        token= a_token,
+        username='',
+        defaults={'username': "leo-test"})
+    '''
