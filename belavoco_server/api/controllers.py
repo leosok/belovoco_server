@@ -148,53 +148,59 @@ def set_like(hash_value,action=None):
 
 
 
-@api.route("/users/<something>", methods=['GET'])
+@api.route("/user/<something>", methods=['GET'])
 def user_stub(something):
     return "this is user API"
 
-@api.route("/users/add", methods=['POST'])
+@api.route("/user/add", methods=['POST','PUT'])
 def set_user():
+    
+    if flask.request.method == 'PUT':
+        print "Updating User..."
+        return "User Updated"
 
+    
+    if flask.request.method == 'POST':
     #This was not working due to a BUG on PythonAnywhere
     #data = request.get_json(force=False, silent=False)
      
     #Was replaced by:
-    data2 = request.json.get('user')
-    print data2
+        data2 = request.json.get('user')
+        print data2
 
-    #This is a nicer try-except
-    if 'useremail' in request.json.get('user'):
-        user_email = request.json.get('user')['useremail']
-    else: user_email = 'none'
+        #This is a nicer try-except
+        if 'useremail' in request.json.get('user'):
+            user_email = request.json.get('user')['useremail']
+        else: user_email = 'none'
 
-    if 'username' in request.json.get('user'):
-        user_name = request.json.get('user')['username']
-    else: 
-        user_name ='Mustermann'
-    if 'playerid' in request.json.get('user'):
-        user_player_id = request.json.get('user')['playerid']
-    else: 
-        user_player_id ='0'
+        if 'username' in request.json.get('user'):
+            user_name = request.json.get('user')['username']
+        else: 
+            user_name ='Mustermann'
+        if 'playerid' in request.json.get('user'):
+            user_player_id = request.json.get('user')['playerid']
+        else: 
+            user_player_id ='0'
 
 
-    user_hash = hashlib.sha1(user_email).hexdigest()
+        user_hash = hashlib.sha1(user_email).hexdigest()
 
-    user, created = User.get_or_create(
-        user_email = user_email,
-        player_id = user_player_id,
-        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
-        )
-   
-    jsondata = {}
-    jsondata['did_exist'] = not created
-    jsondata['user_hash'] = user_hash
-
-    app.logger.debug(jsondata)
+        user, created = User.get_or_create(
+            user_email = user_email,
+            player_id = user_player_id,
+            defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
+            )
     
-    return json.dumps(jsondata)
+        jsondata = {}
+        jsondata['did_exist'] = not created
+        jsondata['user_hash'] = user_hash
 
-    '''user, created = User.get_or_create(
-        token= a_token,
-        username='',
-        defaults={'username': "leo-test"})
-    '''
+        app.logger.debug(jsondata)
+        
+        return json.dumps(jsondata)
+
+        '''user, created = User.get_or_create(
+            token= a_token,
+            username='',
+            defaults={'username': "leo-test"})
+        '''
