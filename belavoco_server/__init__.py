@@ -28,8 +28,9 @@ app.config.from_pyfile('config.py')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #Maximum Size:
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 app.config['APP_ROOT'] = APP_ROOT
+app.config['SEND_PUSH'] = True
 
 bootstrap = Bootstrap(app)
 
