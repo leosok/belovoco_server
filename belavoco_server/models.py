@@ -78,11 +78,8 @@ class User(peewee.Model):
     hash = peewee.CharField()
     time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
     player_id = peewee.CharField(default="0")
-<<<<<<< HEAD
-=======
 
->>>>>>> fileupload_new_audiotypes
-
+#
     class Meta:
         database = database_users
  
