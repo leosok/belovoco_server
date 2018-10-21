@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from flask import Blueprint
 
@@ -214,6 +215,12 @@ def user_create():
 
     user_hash = hashlib.sha1(user_email).hexdigest()
 
+    #TODO: aBug get_or_create creating new user, because User-Email can change  (19.10.18, Leo)
+    #Check: is there a user,
+    # IF NO: Create
+    # IF YES: Update
+    # # Player_id muss überschrieben werden!
+    # 
     user, created = User.get_or_create(
         user_email = user_email,
         player_id = user_player_id,

@@ -33,7 +33,8 @@ from uploader_belavoco import save_file_to_db, remove_dead_files, remove_file_fr
 
 
 
-ALLOWED_EXTENSIONS = set(['wav','ogg', 'mp3'])
+#ALLOWED_EXTENSIONS = set(['wav','ogg', 'mp3'])
+ALLOWED_EXTENSIONS = set(['mp3'])
 IGNORED_FILES = set(['.gitignore','.data'])
 
 
@@ -72,8 +73,11 @@ def upload():
             filename = secure_filename(files.filename)
             filename = gen_file_name(filename)
             mime_type = files.content_type
+            
+            print(filename)
+            print(allowed_file(files.filename))
 
-            if not allowed_file(files.filename):
+            if allowed_file(files.filename) == False:
                 result = uploadfile(name=filename, type=mime_type, size=0, not_allowed_msg="File type not allowed")
 
             else:
