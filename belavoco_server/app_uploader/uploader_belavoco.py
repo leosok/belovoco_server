@@ -5,7 +5,9 @@ import traceback
 import os
 
 import peewee 
-from mutagen.mp3 import MP3
+import mutagen
+
+
 from belavoco_server.models import Audiofile
 from file_hashing import hash_file
 from send_pushnotification import push_gun
@@ -13,7 +15,7 @@ from send_pushnotification import push_gun
 
 def create_audio_decription(audiofile):
     try:
-        audio = MP3(audiofile)
+        audio = mutagen.File(audiofile)
         return audio.info.length
 
     except:
