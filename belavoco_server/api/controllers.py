@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from flask import Blueprint
 
@@ -11,7 +12,7 @@ from playhouse.shortcuts import model_to_dict
 
 from belavoco_server.models import Audiofile, User
 
-from flask import jsonify
+from flask import jsonify, abort
 from flask import send_file, request, Response
 import json
 import simplejson
@@ -69,7 +70,7 @@ def authorize_user_from_header(rq):
         try:
             #Checking ig a user with this Hash exists, and returns it if found
             this_user = User.select().where(User.hash == request_user_hash).get()
-            print "Authorized: %s" % this_user.user_email            
+            print "Authorized request: %s" % this_user.user_email            
             return this_user
         except DoesNotExist:
             print "User not found. Hash: '%s'" % request_user_hash
@@ -87,7 +88,7 @@ def api_hello():
 @api.route('/get/<string:hash_value>/<string:action>', methods=['GET'])
 def get_json(hash_value,action=None):
   
-    print authorize_user_from_header(request)
+    authorize_user_from_header(request)
    
     if hash_value == 'all':
 
@@ -128,7 +129,8 @@ def set_like(hash_value,action=None):
     #I am getting a Post request with a UserHash
     #TODO: Implement User-Model wich will get the likes instad of the audiofiles! 
     #print request.get_json()
-    print authorize_user_from_header(request)
+    
+    authorize_user_from_header(request)
 
 
     if action == 'like':
@@ -147,30 +149,84 @@ def set_like(hash_value,action=None):
 
 
 
-@api.route("/users/<something>", methods=['GET'])
-def user_stub(something):
+@api.route("/user", methods=['PUT'])
+def user_update():
+    
+    print request.json
+    #authorize_user_from_header(request)
+
+    user_data = request.json.get('user')
+
+    #This is a nicer try-except
+    if 'useremail' in user_data:
+        user_email = user_data['useremail']
+    else: user_email = 'none'
+
+    if 'username' in user_data:
+        user_name = user_data['username']
+    else: 
+        user_name ='Mustermann'
+    if 'onesignalid' in user_data:
+        user_player_id = user_data['onesignalid']
+    else: 
+        user_player_id ='0'
+    if 'userhash' in user_data:
+        user_hash = user_data['userhash']
+    else:
+        return abort(404)
+
+    user_update = User.update({User.user_email: user_email,
+                         User.user_name: user_name, 
+                         User.player_id: user_player_id}).\
+                        where(User.hash == user_hash ).\
+                        execute()
+    if user_update:
+        print "User was updated: " + User.select().where(User.hash == user_hash ).get().user_email
+        return "User updated!"        
+    else:
+        print "ERROR: Updating a User which does not exist"
+        abort(404)
+
+
+@api.route("/user", methods=['GET'])
+def user_stub():
     return "this is user API"
 
-@api.route("/users/add", methods=['POST'])
-def set_user():
+@api.route("/user", methods=['POST'])
+def user_create():
+  
+    user_data = request.json.get('user')
+    print user_data
 
-    #This was not working due to a BUG on PythonAnywhere
-    #data = request.get_json(force=False, silent=False)
-     
-    #Was replaced by:
-    data2 = request.json.get('user')
-    print data2
+    #This is a nicer try-except
+    if 'useremail' in user_data:
+        user_email = user_data['useremail']
+    else: user_email = 'none'
 
-    user_email = request.json.get('user')['useremail']
-    user_name = request.json.get('user')['username']
+    if 'username' in user_data:
+        user_name = user_data['username']
+    else: 
+        user_name ='Mustermann'
+    if 'onesignalid' in user_data:
+        user_player_id = user_data['onesignalid']
+    else: 
+        user_player_id ='0'
+
 
     user_hash = hashlib.sha1(user_email).hexdigest()
 
+    #TODO: aBug get_or_create creating new user, because User-Email can change  (19.10.18, Leo)
+    #Check: is there a user,
+    # IF NO: Create
+    # IF YES: Update
+    # # Player_id muss überschrieben werden!
+    # 
     user, created = User.get_or_create(
         user_email = user_email,
-        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash}
+        player_id = user_player_id,
+        defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
         )
-   
+
     jsondata = {}
     jsondata['did_exist'] = not created
     jsondata['user_hash'] = user_hash

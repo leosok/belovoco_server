@@ -72,12 +72,16 @@ class User(peewee.Model):
     """
     ORM model Users table - right now only with little fields
     """
-    
-    user_email = peewee.CharField(primary_key=True)
+
+    user_email = peewee.CharField()
     user_name = peewee.CharField()
     hash = peewee.CharField()
     time_of_registration = peewee.DateTimeField(default=datetime.datetime.now)
     player_id = peewee.CharField(default="0")
+<<<<<<< HEAD
+=======
+
+>>>>>>> fileupload_new_audiotypes
 
     class Meta:
         database = database_users
@@ -88,6 +92,7 @@ from flask_admin.contrib.peewee import ModelView
 
 
 class UserAdmin(ModelView):
+
     column_exclude_list = ['']
     column_searchable_list = ('user_email','user_name')
     #column_filters = ('user_email',)

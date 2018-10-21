@@ -50,7 +50,8 @@
 
   </div>
 
-  <form id="fileupload" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
+  <form id="fileupload" action="{{ upload_url }}" method="POST" enctype="multipart/form-data" accept="audio/mp3">
+    
     <div class="form-group row">
       <div class="form-group">
         <!-- <div class="col-md-12 text-center">   -->
@@ -98,7 +99,8 @@
           <i class="glyphicon glyphicon-plus"></i>
           <span>Select files...</span>          
           <!-- The file input field used as target for the file upload widget -->
-          <input id="fileupload1" type="file" name="file">
+          <input id="fileupload1" type="file" name="file" accept="audio/mp3">
+  
         </span>
         <button type="button" class="upload_button btn btn-primary">Upload</button>
         <br>
