@@ -9,6 +9,9 @@ $(function () {
   
     $('.upload_button').prop('disabled', true);
 
+    $('#fileupload1').bind('fileuploadaddfileerror', function (e, data){
+        console.log('Custom Error Event Fired');
+    });
 
 
     $('#fileupload1').fileupload({  
@@ -48,14 +51,20 @@ $(function () {
             $('.upload_button').text("Done!").prop("disabled",true);
             $('.filename_text').toggleClass('bg-info bg-success');
             $('.filename_text').prepend("✔ ");
-          //console.log("Upload finished!"); 
-          //console.log($('form').serializeArray())
-            /*
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo('#files');
-                alert(file.name + ' erfolgreich hochgeladen!');
-            }); */
+            //alert('Dankeschön ✔')
         },
+
+        // This will trigger an ALERT with a Server Message
+        fail: function(e, data){
+            $('.upload_button').text("Upload");
+            $('.filename_text').toggleClass('bg-info bg-danger');
+            $('.filename_text').prepend("✘");
+            alert('Fehler. Servermeldung: '+ data.jqXHR.responseJSON.msg);
+        },
+
+
+
+
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
             $('#progress .progress-bar').css(
@@ -75,7 +84,8 @@ $(function () {
             }
             node.appendTo(data.context);
         });
-    })    
+    })  
+    
     .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
   });

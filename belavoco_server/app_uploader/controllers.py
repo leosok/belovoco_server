@@ -1,4 +1,5 @@
 #!flask/bin/python
+# -*- coding: utf-8 -*-
 
 # Author: Ngo Duy Khanh
 # Email: ngokhanhit@gmail.com
@@ -23,6 +24,7 @@ import simplejson
 import traceback
 
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from flask import Response, abort
 
 from werkzeug import secure_filename
 
@@ -34,7 +36,7 @@ from uploader_belavoco import save_file_to_db, remove_dead_files, remove_file_fr
 
 
 #ALLOWED_EXTENSIONS = set(['wav','ogg', 'mp3'])
-ALLOWED_EXTENSIONS = set(['mp3'])
+ALLOWED_EXTENSIONS = set(['mp3', 'm4a'])
 IGNORED_FILES = set(['.gitignore','.data'])
 
 
@@ -78,7 +80,10 @@ def upload():
             print(allowed_file(files.filename))
 
             if allowed_file(files.filename) == False:
-                result = uploadfile(name=filename, type=mime_type, size=0, not_allowed_msg="File type not allowed")
+                extension = os.path.splitext(files.filename)[1]
+                error_message = simplejson.dumps({'msg': 'Das Fomat "{}" wird nicht unterstützt. BelaVoco spielt nur folgende Formate ab: {} '.format(extension, ', '.join(ALLOWED_EXTENSIONS))})
+                return abort(Response(error_message, 414))
+                #result = uploadfile(name=filename, type=mime_type, size=0, not_allowed_msg="File type not allowed")
 
             else:
                 # save file to disk
