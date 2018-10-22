@@ -19,7 +19,7 @@ class Anonymous(AnonymousUserMixin):
     self.username = 'Guest'
  """
  ##### END OF LOGIN
-
+ # 
 
 DB_FILE_UPLOADS = os.path.join(APP_ROOT, "uploads.db")
 DB_FILE_USERS = os.path.join(APP_ROOT, "users.db")
@@ -114,18 +114,41 @@ class AudioAdmin(ModelView):
 
 if __name__ == "__main__":
 
-    import logging
-    logger = logging.getLogger('peewee')
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.StreamHandler())
+    print DB_FILE_USERS
+    
+    
+    
+    zero_likes = raw_input("Do you want to set Likes to 0 (y/n) ").lower() in ('y','yes')
+    if zero_likes:
+        print "Zeroing likes..."
+        for a in Audiofile.select():
+            print "%s - Likes %d" % (a.reader, a.times_liked)
+            a.times_liked = 0
+            a.save()
 
-    try:
+    zero_likes = raw_input("Do you want to set Plays to 0 (y/n) ").lower() in ('y','yes')
+    if zero_likes:
+        print "Zeroing likes..."
+        for a in Audiofile.select():
+            print "%s - Likes %d" % (a.reader, a.times_played)
+            a.times_played = 0
+            a.save()        
+
+
+    #import logging
+    #logger = logging.getLogger('peewee')
+    #logger.setLevel(logging.DEBUG)
+    #logger.addHandler(logging.StreamHandler())
+
+
+    if not Audiofile.table_exists():
+        print "Created Audiofile table"
         Audiofile.create_table()
-        print "Created Audiofil table"
-    except peewee.OperationalError:
+    else:
         print "Audiofile table already exists!"
-    try:
-        User.create_table()
+
+    if not Audiofile.table_exists():
         print "Created User table"
-    except peewee.OperationalError:
+        Audiofile.create_table()
+    else:
         print "User table already exists!"
