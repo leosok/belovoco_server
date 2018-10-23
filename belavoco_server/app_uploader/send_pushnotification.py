@@ -3,7 +3,6 @@
 from belavoco_server.models import Audiofile, User
 from flask import current_app 
 import onesignal as onesignal_sdk
-import sys
 
 
 
@@ -26,13 +25,13 @@ def push_gun(audiofile):
     if config['SEND_PUSH'] == False:
         print "SEND_PUSH = FALSE | Not sending Message:"
         # Encoding will fix Error on Server, leading to not sending PUSH
-        print message.encode(sys.stdout.encoding)
+        print message.encode('utf-8')
     
     else:
 
         print "Sending Message:"
         # Encoding will fix Error on Server, leading to not sending PUSH
-        print message.encode(sys.stdout.encoding)
+        print message.encode('utf-8')
 
         onesignal_client = configure_onesignal()    
         
