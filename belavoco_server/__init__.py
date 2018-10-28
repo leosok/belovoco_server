@@ -35,6 +35,7 @@ app.config['SEND_PUSH'] = True
 bootstrap = Bootstrap(app)
 
 app.register_blueprint(api, url_prefix='/api')
+#TODO: Remove "File-Panel"
 app.register_blueprint(app_uploader, url_prefix='/file-panel')
 
 
