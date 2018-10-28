@@ -1,0 +1,40 @@
+<h1>ICH BIN DADADA</h1>
+
+<script>
+
+$( "input[type='checkbox']" ).change(function(){
+    this.hide()
+});
+
+</script>
+
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Email für Upload</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bitte BelaVoco Email eintragen:</p>
+                <!-- <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p> -->
+
+                <div class="input-group">
+                    
+                    <span class="input-group-addon" id="basic-addon1">Email:</span>                   
+                    <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                 </div>
+                 
+                 <div class="checkbox">
+                        <label><input type="checkbox" name="check_upload_without_email" value="">Anonymer Upload (kann nicht gelöscht werden)</label>
+                 </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

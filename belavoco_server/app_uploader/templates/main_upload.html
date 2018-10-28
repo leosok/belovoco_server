@@ -27,6 +27,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fileupload.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}"> {% endblock %} {% block content %}
 
+
+<!-- Including the modal dialogue -->
+{% include 'modal_mail.html' %}
+
+
 <div class="container-fluid">
   <div class="row">
     <!-- <div class="center-block"> -->
@@ -138,15 +143,15 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ url_for('static', filename='js/vendor/jquery.ui.widget.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery.iframe-transport.js') }} "></script>
+<script src="{{ url_for('static', filename='js/vendor/jquery.iframe-transport.js') }} "></script>
 <!-- The basic File Upload plugin -->
-<script src="{{ url_for('static', filename='js/jquery.fileupload.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/jquery.fileupload.js') }}"></script>
 
-<script src="{{ url_for('static', filename='js/jquery.modal-video.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/jquery.modal-video.min.js') }}"></script>
 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-
-
+<script src="{{ url_for('static', filename='js/belavoco_video_tut.js') }}"></script>
 
 
 <!-- Loading our belavoce Javascript - include, so it can be parsed -->
@@ -154,7 +159,7 @@
 <script>
 
 /* eslint-disable */
-{% include 'belavoco_video_tut.js' %}  /*eslint-disable*/
+
 {% include 'belavoco_fileupload.js' %}  /*eslint-disable*/
 
 /* eslint-enable */
