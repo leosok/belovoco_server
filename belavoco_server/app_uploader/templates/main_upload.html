@@ -1,5 +1,12 @@
-{% extends "bootstrap/base.html" %} {% block title %}BelaVoco{% endblock %} {% block head %} {{ super() }}
+{% extends "bootstrap/base.html" %} 
 
+{% block title %}BelaVoco{% endblock %} 
+
+{% block head %}   
+{{ super() }}
+
+<meta name="description" content="BelaVoco ist eine Community aus Lesenden und Hörenden.
+Aufnahmen hier, höhren in der APP.">
 
 <!-- ++++++++++++++++++  -->
 <!-- "upload URL is currently file-panel/upload"  -->
@@ -25,7 +32,10 @@
 
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fileupload.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}"> {% endblock %} {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.fileupload-ui.css') }}"> 
+
+{% endblock %} 
+{% block content %}
 
 
 <!-- Including the modal dialogue -->
