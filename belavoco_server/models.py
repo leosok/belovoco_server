@@ -60,7 +60,7 @@ class User(BaseModel):
             
         blocked_audios = Audiofile.select().join(Audio_not_allowed).where(Audio_not_allowed.user == self)
         #get all audios which are not in the blocked_audios
-        audios_not_blocked = Audiofile.select().where(Audiofile.id.not_in(blocked_audios))
+        audios_not_blocked = Audiofile.select().where((Audiofile.id.not_in(blocked_audios)) and (Audiofile.is_active == True) )
         return audios_not_blocked
 
     def get_all_audios_as_json(self):
@@ -69,11 +69,12 @@ class User(BaseModel):
         for a in self.get_all_audios():             
             a_dict = model_to_dict(a) 
             #add a value "liked", audio is liked by self(user)
-            a_dict['liked'] = a.is_liked(self)  
+            a_dict['liked'] = a.is_liked(self)
+            a_dict['times_liked'] = a.count_likes()
             #print a_dict        
             all_records.append(a_dict)        
 
-        #print json.dumps(all_records, indent=4, sort_keys=True, default=str)
+        print json.dumps(all_records, indent=4, sort_keys=True, default=str)
 
         return json.dumps(all_records, indent=4, sort_keys=True, default=str)
 
@@ -157,6 +158,7 @@ class Audiofile(BaseModel):
     
     def add_played(self,user):
         Play.create(audiofile = self, user = user)
+        self.times_played = self.count_plays().save()
 
     def count_plays(self):
         return Play.select().where(Play.audiofile == self ).count()
@@ -178,7 +180,7 @@ class Audiofile(BaseModel):
 class AudioAdmin(ModelView):
     column_exclude_list = [''] 
     column_searchable_list = ('title',)
-    column_editable_list = ('file_name','file_url' )
+    column_editable_list = ('file_name','file_url','is_active' )
     #column_filters = ('user_email', 'user_name')
     #column_filters = ('user_user_email',)
 

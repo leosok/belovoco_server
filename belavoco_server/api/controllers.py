@@ -84,38 +84,49 @@ def api_hello():
     return "Welcome to BeloVoco JSON-Api"
 
 
+
+@api.route('/get/<string:hash_value>/play', methods=['GET'])
+def play(hash_value): 
+        
+    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    data = model_to_dict (this_audio)
+    #Add +1 to the Play Counter:
+    #TODO: Add a "real" Playcount. Problem: The Trackplayer is not sending a header---
+    #this_audio.add_played(current_user)
+    this_audio.times_played += 1
+    this_audio.save()
+    
+    #Create path & send the file to User
+    file_path = os.path.join(app.root_path,'..',this_audio.file_name)
+    return play_seeking(file_path,request)
+
+
+@api.route('/get/<string:hash_value>/play', methods=['PUT'])
+@authorize
+def inc_playcount(hash_value,current_user=None): 
+        
+    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    this_audio.add_played(current_user)
+    
+    #Create path & send the file to User
+    file_path = os.path.join(app.root_path,'..',this_audio.file_name)
+    return play_seeking(file_path,request)
+
+
 @api.route("/get/<string:hash_value>", methods=['GET'])
-@api.route('/get/<string:hash_value>/<string:action>', methods=['GET'])
 @authorize
 def get_json(hash_value,action=None,current_user=None):
 
     print "Wer ist da? %s" % (current_user)
 
     if hash_value == 'all':        
-        return current_user.get_all_audios_as_json()
+        return current_user.get_all_audios_as_json()             
 
-    else:
-        #try:
-            this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
-            data = model_to_dict (this_audio)
-            if action == 'play':
-                #Add +1 to the Play Counter:
-                #TODO: Add a "real" Playcount. Problem: The Trackplayer is not sending a header---
-                #this_audio.add_played(current_user)
-                this_audio.times_played += 1
-                this_audio.save()
-                
-                #Create path & send the file to User
-                file_path = os.path.join(app.root_path,'..',this_audio.file_name)
-                return play_seeking(file_path,request)
-               
+    else: 
+        this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+        data = model_to_dict (this_audio)
+        return json.dumps(data, indent=4, sort_keys=True, default=str)
 
-            else: 
-                return json.dumps(data, indent=4, sort_keys=True, default=str)
-
-        #except:
-            #return json.dumps(False)    
-        #There is a hash comming, we want a file
 
 @api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST'])
 @authorize
