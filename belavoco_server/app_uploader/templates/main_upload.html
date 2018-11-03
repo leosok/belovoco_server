@@ -57,8 +57,11 @@
 
   <form id="fileupload" action="{{ upload_url }}" method="POST" enctype="multipart/form-data" accept="audio/mp3">
     
+    <input type="hidden" id="creator_email" name="creator_email" value="">
+
     <div class="form-group row">
-      <div class="form-group">
+      <div class="form-group">       
+      
         <!-- <div class="col-md-12 text-center">   -->
         <div class="form-group col-md-3 col-md-offset-3">
           <label class="col-form-label">Reader:</label>
@@ -150,6 +153,9 @@
 <script src="{{ url_for('static', filename='js/vendor/jquery.modal-video.min.js') }}"></script>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
 <script src="{{ url_for('static', filename='js/belavoco_video_tut.js') }}"></script>
 

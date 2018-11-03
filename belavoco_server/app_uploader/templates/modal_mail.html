@@ -1,7 +1,7 @@
-<h1>ICH BIN DADADA</h1>
+<h1>ICH BIN</h1>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.5.3/css/bootstrapValidator.min.css"/> -->
 
-
-<div id="myModal" class="modal fade">
+<div id="ModalEmail" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,21 +11,30 @@
             <div class="modal-body">
                 <p>Bitte BelaVoco Email eintragen:</p>
                 <!-- <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p> -->
+                <form role="form" data-toggle="validator" >
 
-                <div class="input-group">
+                    <div class="form-group has-feedback" id="modal-email-form" >
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Email:</span>
+                            <input id="input_upload_email" data-toggle="tooltip" type="email" class="form-control"
+                                placeholder="bestreader@digest.com" required>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
                     
-                    <span class="input-group-addon" id="basic-addon1">Email:</span>                   
-                    <input id="input_upload_email" type="text" class="form-control" placeholder="bestreader@digest.com" aria-describedby="basic-addon1">
-                 </div>
-                 
-                 <div class="checkbox">
-                        <label><input type="checkbox" name="check_upload_without_email" value="">Anonymer Upload (kann nicht gelöscht werden)</label>
-                 </div>
+
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="check_upload_without_email" value="">Anonymer Upload
+                            (kann nicht gelöscht werden)</label>
+                    </div>
+
+
+                </form>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="modal_upload_button_click()">Continue Upload</button>
             </div>
         </div>
     </div>
