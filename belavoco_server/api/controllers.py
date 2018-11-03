@@ -236,24 +236,23 @@ def user_create():
         defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
         )
 
+    resp_json = {}
+    resp_json['did_exist'] = not created
+    resp_json['user_hash'] = user_hash
+    
     if created == False:
         #send back the Username of the existing user
-        jsondata['user_name'] = user.user_name        
+        resp_json['user_name'] = user.user_name        
         print 'User "{}" did exist'.format(user.user_email)
 
         if user.player_id != user_player_id:
             print 'Plyer_id changed: {} -> {}'.format(user.player_id,user_player_id)
             user.player_id =  user_player_id
-            user.save()   
-
-    jsondata = {}
-    jsondata['did_exist'] = not created
-    jsondata['user_hash'] = user_hash
+            user.save()     
     
-
-    app.logger.debug(jsondata)
+    app.logger.debug(resp_json)
     
-    return json.dumps(jsondata)
+    return json.dumps(resp_json)
 
     '''user, created = User.get_or_create(
         token= a_token,
