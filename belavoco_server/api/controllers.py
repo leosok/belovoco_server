@@ -14,6 +14,10 @@ from belavoco_server.models import Audiofile, User
 
 from flask import jsonify, abort
 from flask import send_file, request, Response
+from functools import wraps
+from flask import abort
+#from flask import g
+
 import json
 import simplejson
 import os, sys
@@ -22,9 +26,11 @@ import mimetypes
 from werkzeug.security import generate_password_hash
 
 
+
 import logging
 import hashlib
 from peewee import DoesNotExist
+
 
 def play_seeking(path, the_request):
 
@@ -61,45 +67,32 @@ def play_seeking(path, the_request):
         rv.headers.add('Content-Range', 'bytes {0}-{1}/{2}'.format(byte1, byte1 + length - 1, size))
         return rv
 
-
-def authorize_user_from_header(rq):
-    
-    try:
-        #Checking if there is a AUTH-Header, if not this will throw a KeyError
-        request_user_hash = rq.headers['Authorization']
-        try:
-            #Checking ig a user with this Hash exists, and returns it if found
-            this_user = User.select().where(User.hash == request_user_hash).get()
-            print "Authorized request: %s" % this_user.user_email            
-            return this_user
-        except DoesNotExist:
-            print "User not found. Hash: '%s'" % request_user_hash
-            return False
-    except KeyError:   
-        print "Using old API, without Authorization-Header"
-        return False
+def authorize(f):
+    @wraps(f)
+    def decorated_function(*args, **kws):
+            if not 'Authorization' in request.headers:
+               abort(401)            
+            else:            
+                request_user_hash = request.headers['Authorization']
+                kws['current_user'] = User.select().where(User.hash == request_user_hash).get()
+                return f(*args, **kws)            
+    return decorated_function
 
 
 @api.route("/")
 def api_hello():
     return "Welcome to BeloVoco JSON-Api"
 
+
 @api.route("/get/<string:hash_value>", methods=['GET'])
 @api.route('/get/<string:hash_value>/<string:action>', methods=['GET'])
-def get_json(hash_value,action=None):
-  
-    authorize_user_from_header(request)
-   
-    if hash_value == 'all':
+@authorize
+def get_json(hash_value,action=None,current_user=None):
 
-        all_records = []
-        for a in Audiofile.select().order_by(Audiofile.upload_time.desc()):
-            a_dict = model_to_dict(a)
-            all_records.append(a_dict)
-        
+    print "Wer ist da? %s" % (current_user)
 
-        return json.dumps(all_records, indent=4, sort_keys=True, default=str)
-        #return simplejson.dumps({filename: 'True'})
+    if hash_value == 'all':        
+        return current_user.get_all_audios_as_json()
 
     else:
         #try:
@@ -107,6 +100,8 @@ def get_json(hash_value,action=None):
             data = model_to_dict (this_audio)
             if action == 'play':
                 #Add +1 to the Play Counter:
+                #TODO: Add a "real" Playcount. Problem: The Trackplayer is not sending a header---
+                #this_audio.add_played(current_user)
                 this_audio.times_played += 1
                 this_audio.save()
                 
@@ -123,26 +118,27 @@ def get_json(hash_value,action=None):
         #There is a hash comming, we want a file
 
 @api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST'])
-def set_like(hash_value,action=None):
+@authorize
+def set_like(hash_value,action=None,current_user=None):
     this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
     
     #I am getting a Post request with a UserHash
     #TODO: Implement User-Model wich will get the likes instad of the audiofiles! 
     #print request.get_json()
     
-    authorize_user_from_header(request)
+    #current_user = authorize_user_from_header(request)
 
+    if (action == 'like') or (action == 'unlike'):
+        current_user.like(this_audio)
+        #current_user.save()
+        print "{}, {}".format(current_user.user_name,this_audio.title)
 
-    if action == 'like':
-        
-        this_audio.times_liked += 1
-        this_audio.save()
-    
-    if action == 'unlike':
+    #TODO: Like == Unlike :-)
+        """   if action == 'unlike':
        
         if this_audio.times_liked > 0:
             this_audio.times_liked -= 1
-            this_audio.save()
+            this_audio.save() """
 
     data = model_to_dict (this_audio)
     return json.dumps(data, indent=4, sort_keys=True, default=str)

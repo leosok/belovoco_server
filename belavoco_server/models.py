@@ -1,10 +1,14 @@
 # models.py
 import peewee
 from peewee import *
+
+from playhouse.shortcuts import model_to_dict
+
 import datetime
 
 import os
 from base_config import APP_ROOT
+import json
 
 #import flask_admin as admin
 from flask_admin.contrib.peewee import ModelView
@@ -51,7 +55,7 @@ class User(BaseModel):
     def __unicode__(self):
         return self.user_email
 
-    def get_all(self):
+    def get_all_audios(self):
         """ Returns all not-blocked audiofiles for user """        
             
         blocked_audios = Audiofile.select().join(Audio_not_allowed).where(Audio_not_allowed.user == self)
@@ -59,14 +63,31 @@ class User(BaseModel):
         audios_not_blocked = Audiofile.select().where(Audiofile.id.not_in(blocked_audios))
         return audios_not_blocked
 
+    def get_all_audios_as_json(self):
+            
+        all_records = []
+        for a in self.get_all_audios():             
+            a_dict = model_to_dict(a) 
+            #add a value "liked", audio is liked by self(user)
+            a_dict['liked'] = a.is_liked(self)  
+            #print a_dict        
+            all_records.append(a_dict)        
+
+        #print json.dumps(all_records, indent=4, sort_keys=True, default=str)
+
+        return json.dumps(all_records, indent=4, sort_keys=True, default=str)
+
+
     def like(self,audiofile):
         try:
             Like.create(
-                    user_liking=self,
+                    user=self,
                     audiofile=audiofile )
-            return True
-        except:
-            return False
+        except IntegrityError:
+        #This like did exist - so we UNLIKE
+            like_query = Like.select().where(Like.user==self,
+                        Like.audiofile==audiofile)            
+            like_query.get().delete_instance()
 
     class Meta:
         table_name = 'users'
@@ -130,6 +151,12 @@ class Audiofile(BaseModel):
 
     def count_likes(self):
         return Like.select().where(Like.audiofile == self ).count()
+
+    def is_liked(self,user):
+         return Like.select().where(Like.audiofile == self , Like.user == user).count()
+    
+    def add_played(self,user):
+        Play.create(audiofile = self, user = user)
 
     def count_plays(self):
         return Play.select().where(Play.audiofile == self ).count()

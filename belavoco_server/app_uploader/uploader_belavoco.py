@@ -36,9 +36,7 @@ def save_file_to_db(audiofile, request):
 
         #print request.form
 
-        try:
-
-            
+        try:            
 
             new_audiofile = Audiofile.create(
                     file_name = audiofile,
