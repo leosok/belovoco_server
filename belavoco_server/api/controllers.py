@@ -200,7 +200,8 @@ def user_create():
 
     #This is a nicer try-except
     if 'useremail' in user_data:
-        user_email = user_data['useremail']
+        # important that all emails are made lower-cased!
+        user_email = user_data['useremail'].lower()
     else: user_email = 'none'
 
     if 'username' in user_data:
@@ -221,15 +222,34 @@ def user_create():
     # IF YES: Update
     # # Player_id muss überschrieben werden!
     # 
+
+
+    """  user_check_query = User.select().where(User.user_email == user_email)
+    if user_check_query.exists():
+        print "USERQUERY: does exist" 
+    """
+
+
     user, created = User.get_or_create(
         user_email = user_email,
-        player_id = user_player_id,
+        #player_id = user_player_id, <-- made a Bug in iOS creating a new User because of always new PlayerID
         defaults={'user_email':user_email,'user_name': user_name, 'hash': user_hash, 'player_id':user_player_id}
         )
+
+    if created == False:
+        #send back the Username of the existing user
+        jsondata['user_name'] = user.user_name        
+        print 'User "{}" did exist'.format(user.user_email)
+
+        if user.player_id != user_player_id:
+            print 'Plyer_id changed: {} -> {}'.format(user.player_id,user_player_id)
+            user.player_id =  user_player_id
+            user.save()   
 
     jsondata = {}
     jsondata['did_exist'] = not created
     jsondata['user_hash'] = user_hash
+    
 
     app.logger.debug(jsondata)
     
