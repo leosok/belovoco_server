@@ -117,7 +117,7 @@ def inc_playcount(hash_value,current_user=None):
 @authorize
 def get_json(hash_value,action=None,current_user=None):
 
-    print "Wer ist da? %s" % (current_user)
+    #print "Wer ist da? %s" % (current_user)
 
     if hash_value == 'all':        
         return current_user.get_all_audios_as_json()             

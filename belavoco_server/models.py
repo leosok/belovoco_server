@@ -70,11 +70,11 @@ class User(BaseModel):
             a_dict = model_to_dict(a) 
             #add a value "liked", audio is liked by self(user)
             a_dict['liked'] = a.is_liked(self)
-            a_dict['times_liked'] = a.count_likes()
+            #a_dict['times_liked'] = a.count_likes()
             #print a_dict        
             all_records.append(a_dict)        
 
-        print json.dumps(all_records, indent=4, sort_keys=True, default=str)
+        #print json.dumps(all_records, indent=4, sort_keys=True, default=str)
 
         return json.dumps(all_records, indent=4, sort_keys=True, default=str)
 
@@ -89,6 +89,10 @@ class User(BaseModel):
             like_query = Like.select().where(Like.user==self,
                         Like.audiofile==audiofile)            
             like_query.get().delete_instance()
+
+        Audiofile.update(times_liked = audiofile.count_likes()).\
+                        where(Audiofile.hash == audiofile.hash).\
+                        execute()
 
     class Meta:
         table_name = 'users'
@@ -151,6 +155,7 @@ class Audiofile(BaseModel):
         return Comment.select().where(Comment.audiofile == self)
 
     def count_likes(self):
+       
         return Like.select().where(Like.audiofile == self ).count()
 
     def is_liked(self,user):
@@ -158,7 +163,10 @@ class Audiofile(BaseModel):
     
     def add_played(self,user):
         Play.create(audiofile = self, user = user)
-        self.times_played = self.count_plays().save()
+        Audiofile.update(times_played = self.count_plays()).\
+                        where(Audiofile.hash == self.hash).\
+                        execute()
+
 
     def count_plays(self):
         return Play.select().where(Play.audiofile == self ).count()
