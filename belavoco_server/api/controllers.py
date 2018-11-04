@@ -37,9 +37,9 @@ from comments import ctrl_comments
 def play_seeking(path, the_request):
 
     range_header = the_request.headers.get('Range', None)
-    print the_request.headers
+    #print the_request.headers
     if not range_header:
-        print "just sending a file"
+        #print "just sending a file"
         return send_file(path)
     else:
         size = os.path.getsize(path)
