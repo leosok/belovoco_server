@@ -11,15 +11,16 @@
             <div class="modal-body">
                 <p>Bitte BelaVoco Email eintragen:</p>
                 <!-- <p class="text-warning"><small>If you don't save, your changes will be lost.</small></p> -->
-                <form role="form" data-toggle="validator" >
+                <form role="form" data-toggle="validator"  >
 
                     <div class="form-group has-feedback" id="modal-email-form" >
                         <div class="input-group">
                             <span class="input-group-addon" id="basic-addon1">Email:</span>
-                            <input id="input_upload_email" data-toggle="tooltip" type="email" class="form-control"
-                                placeholder="bestreader@digest.com" required>
+                            <input id="input_upload_email" name="user_email" data-toggle="tooltip" data-remote="/api/validate_user" type="email"  class="form-control"
+                                placeholder="bestreader@digest.com" required 
+                                data-error="Email ungültig oder gehört keinem User. Melde dich bitte in der App an!">
                         </div>
-                        <div class="help-block with-errors"></div>
+                        <div class="help-block with-errors"></div> 
                     </div>
                     
 

@@ -31,6 +31,8 @@ import logging
 import hashlib
 from peewee import DoesNotExist
 
+from comments import ctrl_comments
+
 
 def play_seeking(path, the_request):
 
@@ -78,6 +80,22 @@ def authorize(f):
                 return f(*args, **kws)            
     return decorated_function
 
+
+@api.route("/validate_user", methods=['GET'])
+def validate_user():
+
+    
+    email_to_validate = request.args.get('user_email')
+    #print email_to_validate
+
+    #print User.select().where(User.user_email == email_to_validate).get()
+
+    if User.select().where(User.user_email == email_to_validate).count():
+        return "Nice!"
+    else:
+        abort(404, "User not found in Database")
+    
+    #return "1"
 
 @api.route("/")
 def api_hello():

@@ -1,11 +1,22 @@
-import models
-from models import Comment
+from belavoco_server.api.controllers import *
+
+
+
+def authorize(f):
+    @wraps(f)
+    def decorated_function(*args, **kws):
+            if not 'Authorization' in request.headers:
+               abort(401)            
+            else:            
+                request_user_hash = request.headers['Authorization']
+                kws['current_user'] = User.select().where(User.hash == request_user_hash).get()
+                return f(*args, **kws)            
+    return decorated_function
 
 
 @api.route('/comment/<string:hash_value>', methods=['POST'])
-def add_comment(hash_value):
-
-    current_user = authorize_user_from_header(request)
+@authorize
+def add_comment(hash_value, current_user=None):
 
     print request.json
     #authorize_user_from_header(request)
@@ -18,7 +29,7 @@ def add_comment(hash_value):
 
 
     print "{}, {}".format(current_user.user_name,this_audio.title)    
-        """   if action == 'unlike':
+    """   if action == 'unlike':
        
         if this_audio.times_liked > 0:
             this_audio.times_liked -= 1
@@ -27,3 +38,22 @@ def add_comment(hash_value):
     data = model_to_dict (this_audio)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 
+
+@api.route('/comment/<string:hash_value>', methods=['GET'])
+#@authorize
+def get_comments(hash_value):
+    
+    
+    comments = []
+    for ac in Audiofile.get_by_hash(hash_value).get_comments():
+        comment = {}
+       
+        comment['user'] = model_to_dict(ac.user)
+        comment['pub_date'] = ac.pub_date
+        comment['content'] = ac.content
+        comment['id'] = ac.id
+        comments.append(comment)
+        
+    #print comments
+
+    return json.dumps(comments, indent=4, sort_keys=True, default=str)

@@ -5,7 +5,8 @@
 import flask_admin as admin
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin import Admin, AdminIndexView, expose
-from belavoco_server.models import UserAdmin, User, AudioAdmin, Audiofile, Audio_not_allowed, Like, Play
+from belavoco_server.models import UserAdmin, User, AudioAdmin, Comment
+from belavoco_server.models import Audiofile, Audio_not_allowed, Like, Play
 from flask_admin.contrib.peewee import ModelView
 from flask_admin.model.template import EndpointLinkRowAction, LinkRowAction
 
@@ -39,6 +40,7 @@ admin.add_view(AudioAdmin(Audiofile))
 admin.add_view(Standard_Admin(Audio_not_allowed))
 admin.add_view(Standard_Admin(Like))
 admin.add_view(Standard_Admin(Play))
+admin.add_view(Standard_Admin(Comment))
 
 from os import path as op
 admin.add_view(FileAdmin(app.config['UPLOAD_FOLDER'], name='Files'))   
