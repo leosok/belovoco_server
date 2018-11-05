@@ -10,7 +10,7 @@ from flask import current_app as app
 from playhouse.shortcuts import model_to_dict
 
 
-from belavoco_server.models import Audiofile, User
+from belavoco_server.models import Audiofile, User, Comment
 
 from flask import jsonify, abort
 from flask import send_file, request, Response
@@ -253,8 +253,9 @@ def user_create():
     if user_check_query.exists():
         print "USERQUERY: does exist" 
     """
-
-
+    
+    jsondata = {}
+    
     user, created = User.get_or_create(
         user_email = user_email,
         #player_id = user_player_id, <-- made a Bug in iOS creating a new User because of always new PlayerID
@@ -270,8 +271,7 @@ def user_create():
             print 'Plyer_id changed: {} -> {}'.format(user.player_id,user_player_id)
             user.player_id =  user_player_id
             user.save()   
-
-    jsondata = {}
+    
     jsondata['did_exist'] = not created
     jsondata['user_hash'] = user_hash
     

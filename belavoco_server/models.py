@@ -152,7 +152,23 @@ class Audiofile(BaseModel):
                         )
 
     def get_comments(self):
-        return Comment.select().where(Comment.audiofile == self)
+        return Comment.select().where(Comment.audiofile == self).order_by(Comment.pub_date.desc())
+
+
+    def get_comments_json(self):
+        #Returns a json ready for sending to Cilent
+        comments = []
+        for ac in Audiofile.get_by_hash(self.hash).get_comments():
+            comment = {}
+
+            comment['user'] = model_to_dict(ac.user)
+            comment['pub_date'] = ac.pub_date
+            comment['content'] = ac.content
+            comment['id'] = ac.id
+            comments.append(comment)
+
+        return json.dumps(comments, indent=4, sort_keys=True, default=str)
+
 
     def count_likes(self):
        
@@ -271,7 +287,18 @@ class Comment(BaseModel):
     class Meta:
         table_name = 'comments'
 
-
+    @staticmethod
+    def delete_comment(del_id, current_user):
+        try:
+            comment_delete_query = Comment.select().where((Comment.id == del_id) & (Comment.user == current_user ))            
+            comment_to_delete = comment_delete_query.get()   
+            comment_to_delete.delete_instance()
+            print "Here delete_comment. Deleting CommentID {} Content: {}".format(comment_to_delete.id,comment_to_delete.content)
+        except IntegrityError:
+            print "Comment (ID){} could not be deleted. Wrong user? Does not exist? {}".format(del_id)
+        
+      
+        return True
 
 # simple utility function to create tables
 def create_tables():

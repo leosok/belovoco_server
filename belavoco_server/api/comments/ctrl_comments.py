@@ -40,20 +40,16 @@ def add_comment(hash_value, current_user=None):
 
 
 @api.route('/comment/<string:hash_value>', methods=['GET'])
-#@authorize
-def get_comments(hash_value):
+@authorize
+def get_comments(hash_value, current_user=None):
     
     
-    comments = []
-    for ac in Audiofile.get_by_hash(hash_value).get_comments():
-        comment = {}
-       
-        comment['user'] = model_to_dict(ac.user)
-        comment['pub_date'] = ac.pub_date
-        comment['content'] = ac.content
-        comment['id'] = ac.id
-        comments.append(comment)
-        
-    #print comments
+    return Audiofile.get_comments_json(Audiofile.get_by_hash(hash_value))
 
-    return json.dumps(comments, indent=4, sort_keys=True, default=str)
+
+@api.route('/comment/<int:comment_id>', methods=['DELETE'])
+@authorize
+def delete_comments(comment_id, current_user=None):
+    print "DELETING--- USER: %s" % (current_user.user_name)
+    Comment.delete_comment(comment_id,current_user)
+    return "OK"
