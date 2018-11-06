@@ -26,6 +26,10 @@ import logging
 import hashlib
 from peewee import DoesNotExist
 
+from belavoco_server.app_uploader.send_pushnotification import inform_admins
+
+
+
 def play_seeking(path, the_request):
 
     range_header = the_request.headers.get('Range', None)
@@ -248,7 +252,10 @@ def user_create():
         if user.player_id != user_player_id:
             print 'Plyer_id changed: {} -> {}'.format(user.player_id,user_player_id)
             user.player_id =  user_player_id
-            user.save()     
+            user.save()
+    else:
+        #User is new
+        inform_admins(user)     
     
     app.logger.debug(resp_json)
     
