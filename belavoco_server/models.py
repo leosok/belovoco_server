@@ -267,6 +267,7 @@ class Play(BaseModel):
    
     audiofile = ForeignKeyField(Audiofile, backref='audiofile')
     user = ForeignKeyField(User, backref='user')
+    play_time = DateTimeField(default=datetime.datetime.now)
     
     class Meta:
         indexes = (
