@@ -309,7 +309,10 @@ def create_tables():
         database.create_tables([User, Like, Play,  Audiofile, Comment, Audio_allowed, Audio_not_allowed])
 
 def create_admin():
-    User.create(user_name = 'Admin', user_email = 'info@belavo.co', hash = '99996666613')
+    import uuid
+    admin_hash = uuid.uuid4().hex
+    
+    User.create(user_name = 'Admin', user_email = 'info@belavo.co', hash = admin_hash)
 
 
 
