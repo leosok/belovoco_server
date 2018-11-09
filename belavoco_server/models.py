@@ -23,11 +23,11 @@ import sys
 class Anonymous(AnonymousUserMixin):
   def __init__(self):
     self.username = 'Guest'
- """
+"""
  ##### END OF LOGIN
  # 
 
-DATABASE = 'bv_v2_database.db'
+DATABASE = os.path.join( APP_ROOT, 'bv_v2_database.db')
 
 database = peewee.SqliteDatabase(DATABASE)
 
@@ -308,6 +308,8 @@ def create_tables():
     with database:
         database.create_tables([User, Like, Play,  Audiofile, Comment, Audio_allowed, Audio_not_allowed])
 
+def create_admin():
+    User.create(user_name = 'Admin', user_email = 'info@belavo.co', hash = '99996666613')
 
 
 
@@ -318,4 +320,7 @@ if __name__ == "__main__":
     #logger = logging.getLogger('peewee')
     #logger.setLevel(logging.DEBUG)
     #logger.addHandler(logging.StreamHandler())
+    print "Trying to create databases in: " + DATABASE
     create_tables()
+    create_admin()
+    print "Database created!"
