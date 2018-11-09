@@ -98,7 +98,7 @@ def validate_user():
     #return "1"
 
 @api.route("/")
-def api_hello():
+def index():
     return "Welcome to BeloVoco JSON-Api"
 
 

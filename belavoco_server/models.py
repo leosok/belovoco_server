@@ -208,8 +208,10 @@ class AudioAdmin(ModelView):
     #column_filters = ('user_email', 'user_name')
     #column_filters = ('user_user_email',)
 
+    button_js = ''' '''
+
     column_extra_row_actions = [
-        LinkRowAction('glyphicon glyphicon-new-window icon-new-window', 'http://direct.link/?id={row_id}'),
+        LinkRowAction('glyphicon glyphicon-new-window icon-new-window', '{row_id}'),
     ]
 
 

@@ -1,0 +1,33 @@
+{% extends 'admin/model/list.html' %}
+
+{% block body %}
+    {{ super() }}
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="user-info-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <a href="{{ url }}" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+            <h4 class="modal-title">User Info</h4>
+          </div>
+          <div class="modal-body">
+              BLA....LOADING..
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    
+
+{% endblock body %}
+
+{% block tail %}
+    {{ super() }}
+    <script>
+        function openModal(id){
+            var main_url = window.location.href
+            $("#user-info-modal").modal("show").find(".modal-body").load(main_url+"modal/"+id)
+        }
+    </script>
+    
+{% endblock tail %}
