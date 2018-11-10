@@ -48,9 +48,29 @@ class NewUserView(ModelView):
 
     @expose('/modal/<id>')
     def index(self,id):
-        return "Gut, so sei es, {}".format(User.select().where(User.id == id).get().user_name)
+        #return "Gut, so sei es, {}".format(User.select().where(User.id == id).get().user_name)
+        this_user = User.select().where(User.id == id).get()
+        #return Audiofile.select().where(Audiofile.creator == this_user).first().title
+        
+        audiofiles =  Audiofile.select().where(Audiofile.creator == this_user)
+        try:
+            plays = Play.select(Play.audiofile).where(Play.user == this_user ).distinct()
+            play_infos = []
+            for play in plays:
+                play_info = {}
+                play_info['name'] = play.audiofile.title
+                play_info['count'] = Play.select().where((Play.user == this_user) & (Play.audiofile == play.audiofile)).count()
+                play_info['is_liked'] = Like.select().where((Like.user == this_user) & (Like.audiofile == play.audiofile)).count()
+                play_infos.append(play_info)
+            #print plays.audiofile.title
+        except:
+            plays = None
+            print "Some Error when trying to show Plays by user"
+            pass
+        
+        #print play_infos
+        return self.render('admin/user_modal.html', user= this_user , audiofiles=audiofiles, play_infos = play_infos)
 
-    
 
 
 from belavoco_server import app

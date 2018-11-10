@@ -11,8 +11,8 @@
             <h4 class="modal-title">User Info</h4>
           </div>
           <div class="modal-body">
-              BLA....LOADING..
-          </div>
+            <h1>Loading...</h1>
+        </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -26,7 +26,11 @@
     <script>
         function openModal(id){
             var main_url = window.location.href
-            $("#user-info-modal").modal("show").find(".modal-body").load(main_url+"modal/"+id)
+            
+            //change Title
+            $("#user-info-modal").find(".modal-header").load(main_url+"modal/"+id+" #modal-header-hidden" );
+            $("#user-info-modal").find(".modal-body").load(main_url+"modal/"+id );
+            $("#user-info-modal").modal("show");//.find(".modal-body").load(main_url+"modal/"+id);
         }
     </script>
     

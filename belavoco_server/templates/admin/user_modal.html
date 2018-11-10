@@ -1,0 +1,76 @@
+<div style="display: none">
+  <div id="modal-header-hidden">User Info: {{ user.user_name }}</div>
+  <!-- modal-header-hidden -->
+</div>
+<!-- Hidden div warpper -->
+<!-- 
+<div class="row">
+ 
+    <ul class="list-group list-group-flush">
+      {% for audiofile in audiofiles %}
+      <li class="list-group-item">
+        {{ audiofile.title }}
+        <span class="badge badge-primary badge-pill">
+          <span class="glyphicon glyphicon-repeat"></span>
+          {{ audiofile.times_played }}
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div> -->
+
+<!-- container -->
+<div class="modal-body">
+  <div class="row">
+     
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Audiofiles</div>
+            
+        
+      <ul class="list-group list-group-flush">
+        {% for audiofile in audiofiles %}
+        <li class="list-group-item">
+          {{ audiofile.title }}
+          <span class="badge badge-primary badge-pill">
+            <span class="glyphicon glyphicon-repeat"></span>
+            {{ audiofile.times_played }}
+          </span>
+        </li>
+        {% endfor %}
+      </ul>
+     
+    </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">Has Played</div>
+            
+        
+      <ul class="list-group list-group-flush">
+        {% for play in play_infos %}
+        <li class="list-group-item">
+            {{ play.name }}
+            
+          <span class="badge badge-primary badge-pill">               
+            <span class="glyphicon glyphicon-repeat"> {{ play.count }}</span>           
+          </span>
+          {% if play.is_liked %}
+          <span class="badge progress-bar-danger badge-pill">
+             <span class="glyphicon glyphicon-heart"></span>
+          </span>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+     
+    </div>
+    </div>
+
+
+  </div>
+</div>

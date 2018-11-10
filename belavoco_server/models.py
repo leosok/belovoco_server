@@ -204,7 +204,7 @@ class Audiofile(BaseModel):
 class AudioAdmin(ModelView):
     column_exclude_list = [''] 
     column_searchable_list = ('title',)
-    column_editable_list = ('file_name','file_url','is_active' )
+    column_editable_list = ('file_name','file_url','is_active','creator' )
     #column_filters = ('user_email', 'user_name')
     #column_filters = ('user_user_email',)
 
