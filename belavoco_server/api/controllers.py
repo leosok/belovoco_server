@@ -76,7 +76,12 @@ def authorize(f):
                abort(401)            
             else:            
                 request_user_hash = request.headers['Authorization']
-                kws['current_user'] = User.select().where(User.hash == request_user_hash).get()
+                try:
+                    #due to iOS implementation of BV the app can send an empty Auth header                    
+                    kws['current_user'] = User.select().where(User.hash == request_user_hash).get()
+                except:
+                    abort(401)
+
                 return f(*args, **kws)            
     return decorated_function
 
