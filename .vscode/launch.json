@@ -56,7 +56,8 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "app.py"
+                "FLASK_APP": "belavoco_server",
+                "FLASK_ENV": "development"
             },
             "args": [
                 "run",

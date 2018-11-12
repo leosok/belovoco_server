@@ -42,7 +42,7 @@ def save_file_to_db(audiofile, request):
         except:
             #anonymus; make Admin the user       
             print "Upload with NO USER!"
-            creator = User.select().where(User.id == 1).first()
+            creator = User.select().where(User.id == 1).get()
 
         try:            
 
