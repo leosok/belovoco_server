@@ -9,6 +9,9 @@ $(function () {
   
     $('.upload_button').prop('disabled', true);
 
+    $('.upload_button').click( function() {$('#ModalEmail').modal() });
+
+
     $('#fileupload1').bind('fileuploadaddfileerror', function (e, data){
         console.log('Custom Error Event Fired');
     });
@@ -30,12 +33,19 @@ $(function () {
               
                        
 
-              data.context = $('.upload_button')
+              //data.context = $('.upload_button')
+              data.context = $('#modal_submit_button')
                 .click(function () {
-                    data.formData = $('form').serializeArray(); 
-                    console.log(data);
+                    
+                    var upload_creator_mail = $("#input_upload_email").val();
+                    $("#form_creator_email").val(upload_creator_mail);
 
-                    data.context.text('Uploading...');
+                    console.log("Usermail: "+ $("#form_creator_email").val());
+
+                    $('#ModalEmail').modal('hide');
+                    $('.upload_button').text('Uploading...');
+                    
+                    data.formData = $('form').serializeArray(); 
                     data.submit();
                 });
           })

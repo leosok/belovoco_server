@@ -9,19 +9,6 @@ function modal_upload_button_click(){
     //#creator_email
 }
 
-/* 
-$( "#input_upload_email" ).change(function(){
-
-   
-
-    $.get( AJAX_USERMAIL_URL, function( data ) {
-        console.log(data.exists);
-      });
-
-}); */
-
-//TODO: Validation which tries to find Email in Database...
-
 $('#input_upload_email').validator({
     custom: {
         emailexist: function ($el) {
@@ -37,36 +24,6 @@ $('#input_upload_email').validator({
     }
 });
 
-
-
-function checkUserEmail(mail) {
-    
-    console.log("checking...");
-
-    var r = false;
-    var AJAX_USERMAIL_URL = 'https://bvtest.free.beeceptor.com/' + mail;
-
-    $.ajax({
-        url:AJAX_USERMAIL_URL,
-        //data: { ChapterPOCEmail: name },
-        //type: 'POST',
-        dataType: 'json',
-        async: false // wait for the call, dont treat as an async call
-    }).done(function(result) {
-        r = result === "OK";
-        console.log(result)
-    }).fail(function (err) {
-        console.log(err, "something went awire");
-    }).always(function () {
-        console.log("all done");
-    });
-
-    return r;
-}
-
-
-
-//
 
 $( "input[type='checkbox']" ).change(function(){
     // Anonymer Upload wird de-/aktiviert

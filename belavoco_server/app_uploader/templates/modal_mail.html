@@ -23,7 +23,7 @@
                     
 
                     <div class="checkbox">
-                        <label><input type="checkbox" name="check_upload_without_email" value="">Anonymer Upload
+                        <label><input type="checkbox" name="check_upload_without_email" value="1">Anonymer Upload
                             (kann nicht gelöscht werden)</label>
                     </div>
 
@@ -32,8 +32,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="modal_upload_button_click()">Continue Upload</button>
+                <button id="modal_cancel_button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="modal_submit_button" type="button" class="btn btn-primary"> Continue Upload </button>
             </div>
         </div>
     </div>

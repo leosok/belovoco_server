@@ -8,7 +8,7 @@ import peewee
 import mutagen
 
 
-from belavoco_server.models import Audiofile
+from belavoco_server.models import Audiofile, User
 from file_hashing import hash_file
 from send_pushnotification import push_gun
 
@@ -34,7 +34,15 @@ def save_file_to_db(audiofile, request):
         file_url = '{url}api/get/{hash}/play'.format(url=request.url_root, hash=file_hash)
 
 
-        #print request.form
+        print "Creator ist: {}".format(request.form.get("creator_email"))
+
+        try:
+            creator_mail = request.form.get("creator_email")
+            creator = User.select().where(User.user_email == creator_mail).get()
+        except:
+            #anonymus; make Admin the user       
+            print "Upload with NO USER!"
+            creator = User.select().where(User.id == 1).first()
 
         try:            
 
@@ -48,12 +56,12 @@ def save_file_to_db(audiofile, request):
                     hash = file_hash,
                     file_url = file_url,
                     text_type = request.form.get("text_type"),
-                    text_lang = request.form.get("text_lang")
+                    text_lang = request.form.get("text_lang"),
+                    creator = creator
                 )    
     
         
             new_audiofile.save
-
             push_gun(new_audiofile)
         
         except peewee.IntegrityError as e:
