@@ -31,9 +31,11 @@ $( "input[type='checkbox']" ).change(function(){
 
     if (this.checked){
         $("#input_upload_email").attr('disabled', 'disabled');
+        $("#creator_validation_form").validator('destroy');
     }
     else {
         $("#input_upload_email").removeAttr('disabled');
+        $("#creator_validation_form").validator('validate');
     }
 
 });
