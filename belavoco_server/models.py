@@ -18,6 +18,11 @@ from flask_admin.model.template import EndpointLinkRowAction, LinkRowAction
 #from flask_login import login_manager
 
 import sys
+
+#Migrator!
+from playhouse.db_url import connect
+
+
 #### LOGIN
 """ from flask_login import AnonymousUserMixin
 class Anonymous(AnonymousUserMixin):
@@ -47,6 +52,7 @@ class User(BaseModel):
     hash = CharField()
     time_of_registration = DateTimeField(default=datetime.datetime.now)
     player_id = CharField(default="0")
+    app_version = CharField(default="0")
 
     class Meta:
         table_name = 'users'
@@ -113,7 +119,6 @@ class UserAdmin(ModelView):
         else:
             return True
     '''
-
 
 
 class Audiofile(BaseModel):
@@ -215,7 +220,6 @@ class AudioAdmin(ModelView):
     ]
 
 
-
 class Audio_allowed(BaseModel):   
         
     audiofile = ForeignKeyField(Audiofile, backref='audiofile')
@@ -226,7 +230,6 @@ class Audio_allowed(BaseModel):
             # Specify a unique multi-column index on from/to-user.
             (('audiofile', 'user'), True),
         )
-
 
 
 
@@ -251,6 +254,7 @@ class Standard_Admin(ModelView):
 # model a "many-to-many" relationship between users.  by querying and joining
 # on different columns we can expose who a user is "related to" and who is
 # "related to" a given user
+
 class Like(BaseModel):
    
     audiofile = ForeignKeyField(Audiofile, backref='audiofile')
@@ -281,6 +285,7 @@ class Play(BaseModel):
     
 
 #TODO: Comments
+
 class Comment(BaseModel):
     audiofile = ForeignKeyField(Audiofile, backref='comments')
     user = ForeignKeyField(User, backref='comments')
@@ -318,11 +323,6 @@ def create_admin():
 
 if __name__ == "__main__":
 
-
-    #import logging
-    #logger = logging.getLogger('peewee')
-    #logger.setLevel(logging.DEBUG)
-    #logger.addHandler(logging.StreamHandler())
     print "Trying to create databases in: " + DATABASE
     create_tables()
     create_admin()

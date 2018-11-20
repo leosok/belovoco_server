@@ -291,3 +291,17 @@ def user_create():
         username='',
         defaults={'username': "leo-test"})
     '''
+
+@api.route("/user/version", methods=['POST'])
+@authorize
+def user_version(current_user=None):
+
+    #print request.json
+
+    version_data = request.json.get('version')
+    version_string =  ': '.join([version_data['system'],version_data['build_version']])
+    
+    current_user.app_version = version_string
+    current_user.save() 
+
+    return "ok"
