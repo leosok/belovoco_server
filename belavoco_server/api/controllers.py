@@ -277,7 +277,10 @@ def user_create():
             print 'Plyer_id changed: {} -> {}'.format(user.player_id,user_player_id)
             user.player_id =  user_player_id
             user.save()   
-    
+    else:
+        #User is new
+        inform_admins(user)    
+        
     jsondata['did_exist'] = not created
     jsondata['user_hash'] = user_hash
     
@@ -286,11 +289,11 @@ def user_create():
     
     return json.dumps(jsondata)
 
-    '''user, created = User.get_or_create(
-        token= a_token,
-        username='',
-        defaults={'username': "leo-test"})
-    '''
+ 
+    
+    app.logger.debug(resp_json)
+    
+    return json.dumps(resp_json)
 
 @api.route("/user/version", methods=['POST'])
 @authorize
