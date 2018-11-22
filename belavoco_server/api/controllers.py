@@ -227,7 +227,7 @@ def user_stub():
 def user_create():
   
     user_data = request.json.get('user')
-    print user_data.encode('utf-8')
+    print user_data
 
     #This is a nicer try-except
     if 'useremail' in user_data:
