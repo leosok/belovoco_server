@@ -25,7 +25,7 @@
     {{ super() }}
     <script>
         function openModal(id){
-            var main_url = window.location.href
+            var main_url = window.location.href.split("?")[0] // this is so ".../user/?page=2" will work 
             
             //change Title
             $("#user-info-modal").find(".modal-header").load(main_url+"modal/"+id+" #modal-header-hidden" );
