@@ -21,29 +21,27 @@ def add_comment(hash_value, current_user=None):
     print request.json
     #authorize_user_from_header(request)
 
-    comment_data = request.json.get('comment')
+    try:
+        #File might not have any Comments yet
+        comment_data = request.json.get('comment')
 
-    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
-      
-    this_audio.create_comment(user=current_user, content = comment_data)
+        this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+        
+        this_audio.create_comment(user=current_user, content = comment_data)
+        print "{}, {}".format(current_user.user_name,this_audio.title).encode('utf-8')
 
+        data = model_to_dict (this_audio)
+        return json.dumps(data, indent=4, sort_keys=True, default=str)
 
-    print "{}, {}".format(current_user.user_name,this_audio.title)    
-    """   if action == 'unlike':
-       
-        if this_audio.times_liked > 0:
-            this_audio.times_liked -= 1
-            this_audio.save() """
-
-    data = model_to_dict (this_audio)
-    return json.dumps(data, indent=4, sort_keys=True, default=str)
+    except Exception as e: 
+        print "Comment error: {}".format(e).encode('utf-8')
+        return abort(404)
 
 
 @api.route('/comment/<string:hash_value>', methods=['GET'])
 @authorize
 def get_comments(hash_value, current_user=None):
-    
-    
+       
     return Audiofile.get_comments_json(Audiofile.get_by_hash(hash_value))
 
 
