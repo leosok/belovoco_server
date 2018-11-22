@@ -55,7 +55,7 @@ def inform_admins(new_user):
 def push_gun(audiofile):
     config = current_app.config   
     
-    message = u"{} von {} wurde hochgeladen! Gelesen hat {}.".format(audiofile.title, audiofile.author, audiofile.reader)
+    message = u"{} von {} wurde hochgeladen! Gelesen hat {}.".format(audiofile.title, audiofile.author, audiofile.reader).encode('utf-8')
 
     if config['SEND_PUSH'] == False:
         print "SEND_PUSH = FALSE | Not sending Message:"

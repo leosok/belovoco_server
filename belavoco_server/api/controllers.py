@@ -166,7 +166,7 @@ def set_like(hash_value,action=None,current_user=None):
     if (action == 'like') or (action == 'unlike'):
         current_user.like(this_audio)
         #current_user.save()
-        print "{}, {}".format(current_user.user_name,this_audio.title)
+        print "Like: {}, {}".format(current_user.user_name,this_audio.title).encode('utf-8')
 
     #TODO: Like == Unlike :-)
         """   if action == 'unlike':
@@ -227,7 +227,7 @@ def user_stub():
 def user_create():
   
     user_data = request.json.get('user')
-    print user_data
+    print user_data.encode('utf-8')
 
     #This is a nicer try-except
     if 'useremail' in user_data:
@@ -247,20 +247,7 @@ def user_create():
 
     user_hash = hashlib.sha1(user_email).hexdigest()
 
-    #TODO: aBug get_or_create creating new user, because User-Email can change  (19.10.18, Leo)
-    #Check: is there a user,
-    # IF NO: Create
-    # IF YES: Update
-    # # Player_id muss überschrieben werden!
-    # 
-
-
-    """  user_check_query = User.select().where(User.user_email == user_email)
-    if user_check_query.exists():
-        print "USERQUERY: does exist" 
-    """
-    
-    jsondata = {}
+    resp_json = {}
     
     user, created = User.get_or_create(
         user_email = user_email,
@@ -270,38 +257,34 @@ def user_create():
 
     if created == False:
         #send back the Username of the existing user
-        jsondata['user_name'] = user.user_name        
-        print 'User "{}" did exist'.format(user.user_email)
+        resp_json['user_name'] = user.user_name        
+        print u'User "{}" did exist'.format(user.user_email).encode('utf-8')
 
         if user.player_id != user_player_id:
-            print 'Plyer_id changed: {} -> {}'.format(user.player_id,user_player_id)
+            print 'Player_id changed: {} -> {}'.format(user.player_id,user_player_id)
             user.player_id =  user_player_id
             user.save()   
     else:
         #User is new
         inform_admins(user)    
         
-    jsondata['did_exist'] = not created
-    jsondata['user_hash'] = user_hash
+    resp_json['did_exist'] = not created
+    resp_json['user_hash'] = user_hash
     
 
-    app.logger.debug(jsondata)
-    
-    return json.dumps(jsondata)
-
- 
-    
     app.logger.debug(resp_json)
     
     return json.dumps(resp_json)
 
-@api.route("/user/version", methods=['POST'])
+
+@api.route("/user/version", methods=['PUT'])
 @authorize
 def user_version(current_user=None):
 
-    #print request.json
-
-    version_data = request.json.get('version')
+    #this is a hack, as long as Max is not sending "HEADER application/json"
+    version_data = json.loads(request.data)['version']
+    #version_data = request.json.get('version')
+    
     version_string =  ': '.join([version_data['system'],version_data['build_version']])
     
     current_user.app_version = version_string
