@@ -190,7 +190,7 @@ def user_update():
 
     #This is a nicer try-except
     if 'useremail' in user_data:
-        user_email = user_data['useremail']
+        user_email = user_data['useremail'].lower()
     else: user_email = 'none'
 
     if 'username' in user_data:
