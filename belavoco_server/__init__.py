@@ -23,6 +23,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 app.config['APP_ROOT'] = APP_ROOT
 app.config['SEND_PUSH'] = True
+app.config['ADMIN_EMAILS'] = ["maxgraeber@gmail.com", "l.sokolov@mailbox.org"]
 
 bootstrap = Bootstrap(app)
 

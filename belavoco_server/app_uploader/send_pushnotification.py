@@ -16,6 +16,41 @@ def configure_onesignal():
     return onesignal_client
 
 
+
+def inform_admins(new_user):
+   
+    admins = current_app.config['ADMIN_EMAILS']
+    
+
+    try:
+        onesignal_client = configure_onesignal()    
+        message = u"{} hat sich soeben neu angemeldet!".format(new_user.user_email)
+        
+        # create a notification
+        push_notification = onesignal_sdk.Notification(contents={"en": message})
+        push_notification.set_parameter("headings", {"en": "Neuer User"})
+
+    
+
+        target_devices_array = []
+
+        for admin_mail in admins:        
+            admin_push_id = User.select().where(User.user_email == admin_mail).get().player_id
+            print admin_push_id
+            target_devices_array.append (admin_push_id)
+            #target_devices_array.append(user.player_id)
+
+            #print target_devices_array
+        push_notification.set_target_devices(target_devices_array)
+
+        # send notification, it will return a response
+        onesignal_response = onesignal_client.send_notification(push_notification)
+        #print(onesignal_response.status_code)
+        print(onesignal_response.json())
+    except:
+        return False
+
+
 #Will send a Push Notif to all users
 def push_gun(audiofile):
     config = current_app.config   
