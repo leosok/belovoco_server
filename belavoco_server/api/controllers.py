@@ -156,7 +156,9 @@ def get_json(hash_value,action=None,current_user=None):
         return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 
-@api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST'])
+
+
+@api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST','PUT'])
 @authorize
 def set_like(hash_value,action=None,current_user=None):
     this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
@@ -172,12 +174,9 @@ def set_like(hash_value,action=None,current_user=None):
         #current_user.save()
         print "Like: {}, {}".format(current_user.user_name,this_audio.title).encode('utf-8')
 
-    #TODO: Like == Unlike :-)
-        """   if action == 'unlike':
-       
-        if this_audio.times_liked > 0:
-            this_audio.times_liked -= 1
-            this_audio.save() """
+    if (action == 'activity'):
+        this_audio.is_active = not this_audio.is_active
+        this_audio.save()
 
     data = model_to_dict (this_audio)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
