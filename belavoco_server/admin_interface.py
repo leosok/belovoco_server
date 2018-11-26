@@ -42,7 +42,7 @@ class NewUserView(ModelView):
 
     column_exclude_list = ['']
     #column_searchable_list = ('user_email','user_name',)
-    column_filters = ('user_email', 'user_name', 'User.app_version')
+    column_filters = ('user_email', 'user_name', 'app_version')
     #column_filters = ('user_user_email',)
 
 
