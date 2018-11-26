@@ -6,7 +6,7 @@ import flask_admin as admin
 from flask_admin.actions import action
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin import Admin, AdminIndexView, expose
-from belavoco_server.models import UserAdmin, User, AudioAdmin, Comment
+from belavoco_server.models import  User, Comment
 from belavoco_server.models import Audiofile, Audio_not_allowed, Like, Play
 from flask_admin.contrib.peewee import ModelView
 from flask_admin.model.template import EndpointLinkRowAction, LinkRowAction
@@ -24,27 +24,38 @@ class Standard_Admin(ModelView):
     column_exclude_list = [''] 
     column_editable_list = ('user', )
 
+
+
+
+class AudioAdmin(ModelView):
+    column_exclude_list = [''] 
+    column_searchable_list = ('title',)
+    column_editable_list = ('file_name','file_url','is_active','creator' )
+    #column_filters = ('user_email', 'user_name')
+    #column_filters = ('user_user_email',)
+
+    button_js = ''' '''
+
+    """ column_extra_row_actions = [
+        LinkRowAction('glyphicon glyphicon-new-window icon-new-window', '{row_id}'),
+    ]
+    """
+
+
 class NewUserView(ModelView):
     
    
     list_template = 'admin/model/custom_list.html'
     page_size = 10
 
-    """  with app.app_context():      
-        modal_url =url_for('api.index')# url_for('admin')
-        modal_url.replace('api','admin') """
-
-    
     #open-modal is inline-JS in custom_list.html
     column_extra_row_actions = [
         LinkRowAction('glyphicon glyphicon-new-window icon-new-window', 'javascript:openModal({row_id})'),
     ]
 
     column_exclude_list = ['']
-    #column_searchable_list = ('user_email','user_name',)
     column_filters = ('user_email', 'user_name', 'app_version')
-    #column_filters = ('user_user_email',)
-
+    column_editable_list = ('user_email','user_name', )
 
     # omitting the third argument suppresses the confirmation alert
     @action('change_cost', 'Change Cost')

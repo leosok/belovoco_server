@@ -105,22 +105,6 @@ class User(BaseModel):
 
 
 
-class UserAdmin(ModelView):
-
-    column_exclude_list = ['']
-    column_searchable_list = ('user_email',)
-    #column_filters = ('user_email', 'user_name')
-    #column_filters = ('user_user_email',)
-
-    '''
-    def is_accessible(self):
-        if not current_user.is_authenticated:
-            return False
-        else:
-            return True
-    '''
-
-
 class Audiofile(BaseModel):
     """
     ORM model of album table
@@ -205,20 +189,6 @@ class Audiofile(BaseModel):
     class Meta:
         table_name = 'audiofiles'
 
-
-class AudioAdmin(ModelView):
-    column_exclude_list = [''] 
-    column_searchable_list = ('title',)
-    column_editable_list = ('file_name','file_url','is_active','creator' )
-    #column_filters = ('user_email', 'user_name')
-    #column_filters = ('user_user_email',)
-
-    button_js = ''' '''
-
-    """ column_extra_row_actions = [
-        LinkRowAction('glyphicon glyphicon-new-window icon-new-window', '{row_id}'),
-    ]
-    """
 
 class Audio_allowed(BaseModel):   
         
