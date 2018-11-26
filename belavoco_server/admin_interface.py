@@ -40,6 +40,12 @@ class NewUserView(ModelView):
         LinkRowAction('glyphicon glyphicon-new-window icon-new-window', 'javascript:openModal({row_id})'),
     ]
 
+    column_exclude_list = ['']
+    #column_searchable_list = ('user_email','user_name',)
+    column_filters = ('user_email', 'user_name', 'User.app_version')
+    #column_filters = ('user_user_email',)
+
+
     # omitting the third argument suppresses the confirmation alert
     @action('change_cost', 'Change Cost')
     def action_change_cost(self, ids):

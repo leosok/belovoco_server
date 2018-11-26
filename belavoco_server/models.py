@@ -108,7 +108,7 @@ class User(BaseModel):
 class UserAdmin(ModelView):
 
     column_exclude_list = ['']
-    column_searchable_list = ('user_email','user_name')
+    column_searchable_list = ('user_email',)
     #column_filters = ('user_email', 'user_name')
     #column_filters = ('user_user_email',)
 
@@ -215,10 +215,10 @@ class AudioAdmin(ModelView):
 
     button_js = ''' '''
 
-    column_extra_row_actions = [
+    """ column_extra_row_actions = [
         LinkRowAction('glyphicon glyphicon-new-window icon-new-window', '{row_id}'),
     ]
-
+    """
 
 class Audio_allowed(BaseModel):   
         
