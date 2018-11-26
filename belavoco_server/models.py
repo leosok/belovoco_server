@@ -84,6 +84,25 @@ class User(BaseModel):
 
         return json.dumps(all_records, indent=4, sort_keys=True, default=str)
 
+    def get_my_records(self):
+
+        my_records_db = Audiofile.select().where(Audiofile.creator == self).order_by(Audiofile.upload_time.desc())
+        my_records = []
+
+        for a in my_records_db:             
+            a_dict = model_to_dict(a) 
+            #add a value "liked", audio is liked by self(user)
+            a_dict['liked'] = a.is_liked(self)
+            #a_dict['times_liked'] = a.count_likes()
+            #print a_dict        
+            my_records.append(a_dict)    
+
+        #print json.dumps(all_records, indent=4, sort_keys=True, default=str)
+
+        print my_records
+
+        return json.dumps(my_records, indent=4, sort_keys=True, default=str)
+
 
     def like(self,audiofile):
         try:

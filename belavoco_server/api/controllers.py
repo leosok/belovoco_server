@@ -145,7 +145,10 @@ def get_json(hash_value,action=None,current_user=None):
     #print "Wer ist da? %s" % (current_user)
 
     if hash_value == 'all':        
-        return current_user.get_all_audios_as_json()             
+        return current_user.get_all_audios_as_json()   
+
+    if hash_value == 'records':
+        return current_user.get_my_records()            
 
     else: 
         this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
