@@ -113,7 +113,7 @@ def index():
 @api.route('/get/<string:hash_value>/play', methods=['GET'])
 def play(hash_value,filename='None'): 
         
-    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    this_audio = Audiofile.get_by_hash(hash_value)
     data = model_to_dict (this_audio)
     #Add +1 to the Play Counter:
     #TODO: Add a "real" Playcount. Problem: The Trackplayer is not sending a header---
@@ -130,7 +130,7 @@ def play(hash_value,filename='None'):
 @authorize
 def inc_playcount(hash_value,current_user=None): 
         
-    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    this_audio = Audiofile.get_by_hash(hash_value)
     this_audio.add_played(current_user)
     
     #Create path & send the file to User
@@ -151,17 +151,32 @@ def get_json(hash_value,action=None,current_user=None):
         return current_user.get_my_records()            
 
     else: 
-        this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+        this_audio = Audiofile.get_by_hash(hash_value)
         data = model_to_dict (this_audio)
         return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 
 
 
+@api.route('/set/<string:hash_value>/update', methods=['PUT'])
+@authorize
+def update_audio(hash_value, current_user=None):
+    this_audio = Audiofile.get_by_hash(hash_value)
+   
+    update_data = request.json.get('updateData')
+    this_audio.title = update_data['title']
+    this_audio.author = update_data['author']
+    this_audio.save()
+
+    #return 'ok'
+    return current_user.get_my_records()  
+
+
+
 @api.route('/set/<string:hash_value>/<string:action>', methods=['GET','POST','PUT'])
 @authorize
 def set_like(hash_value,action=None,current_user=None):
-    this_audio = Audiofile.select().where(Audiofile.hash == hash_value).get()
+    this_audio = Audiofile.get_by_hash(hash_value)
     
     #I am getting a Post request with a UserHash
     #TODO: Implement User-Model wich will get the likes instad of the audiofiles! 
