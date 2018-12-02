@@ -15,6 +15,22 @@ from flask import request, url_for
 from flask import current_app
 from belavoco_server import app
 
+
+
+from datetime import date
+from flask_admin.model import typefmt
+
+def date_format(view, value):
+    return value.strftime('%d.%m.%y - %H:%M')
+
+DATE_FORMATTER = dict(typefmt.BASE_FORMATTERS)
+DATE_FORMATTER.update({
+        type(None): typefmt.null_formatter, 
+        date: date_format
+    })
+
+
+
 class HomeView(AdminIndexView):
     @expose("/")
     def index(self):
@@ -23,16 +39,16 @@ class HomeView(AdminIndexView):
 class Standard_Admin(ModelView):
     column_exclude_list = [''] 
     column_editable_list = ('user', )
-
-
+    column_default_sort = ('id', True)
 
 
 class AudioAdmin(ModelView):
     column_exclude_list = [''] 
     column_searchable_list = ('title',)
     column_editable_list = ('file_name','file_url','is_active','creator' )
-    #column_filters = ('user_email', 'user_name')
-    #column_filters = ('user_user_email',)
+
+    column_default_sort = ('id', True)
+
 
     button_js = ''' '''
 
@@ -53,9 +69,12 @@ class NewUserView(ModelView):
         LinkRowAction('glyphicon glyphicon-new-window icon-new-window', 'javascript:openModal({row_id})'),
     ]
 
-    column_exclude_list = ['']
+    column_exclude_list = ['hash']
     column_filters = ('user_email', 'user_name', 'app_version')
     column_editable_list = ('user_email','user_name', )
+    column_default_sort = ('id', True)
+    
+    column_type_formatters = DATE_FORMATTER
 
     # omitting the third argument suppresses the confirmation alert
     @action('change_cost', 'Change Cost')
