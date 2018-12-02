@@ -62,7 +62,6 @@ class AudioAdmin(ModelView):
     # `model` is model instance
     # `name` is property name
 
-    #smallchange_git
 
 class NewUserView(ModelView):
     
