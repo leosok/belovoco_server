@@ -16,12 +16,13 @@ from flask import current_app
 from belavoco_server import app
 
 
-
-from datetime import date
+from datetime import date,timedelta
 from flask_admin.model import typefmt
+import humanize
+
 
 def date_format(view, value):
-    return value.strftime('%d.%m.%y - %H:%M')
+    return humanize.naturaltime(value) #value.strftime('%d.%m.%y - %H:%M')
 
 DATE_FORMATTER = dict(typefmt.BASE_FORMATTERS)
 DATE_FORMATTER.update({
@@ -40,22 +41,26 @@ class Standard_Admin(ModelView):
     column_exclude_list = [''] 
     column_editable_list = ('user', )
     column_default_sort = ('id', True)
+    #Date is ... ago
+    column_type_formatters = DATE_FORMATTER
 
 
 class AudioAdmin(ModelView):
-    column_exclude_list = [''] 
+    column_exclude_list = ['hash','file_name','file_url'] 
     column_searchable_list = ('title',)
     column_editable_list = ('file_name','file_url','is_active','creator' )
 
     column_default_sort = ('id', True)
+    column_type_formatters = DATE_FORMATTER
 
-
-    button_js = ''' '''
-
-    """ column_extra_row_actions = [
-        LinkRowAction('glyphicon glyphicon-new-window icon-new-window', '{row_id}'),
-    ]
-    """
+    #column_formatters = dict(length=lambda v, c, m, p: str(timedelta(seconds=float(m.length))).split('.')[0])
+    column_formatters = dict(length=lambda v, c, m, p: humanize.naturaldelta(timedelta(seconds=float(m.length))))
+    column_formatters['file_size'] = lambda v, c, m, p: humanize.naturalsize(m.file_size)
+    
+    # `view` is current administrative view
+    # `context` is instance of jinja2.runtime.Context
+    # `model` is model instance
+    # `name` is property name
 
 
 class NewUserView(ModelView):
