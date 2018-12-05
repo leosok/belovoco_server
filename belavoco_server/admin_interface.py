@@ -13,7 +13,10 @@ from flask_admin.model.template import EndpointLinkRowAction, LinkRowAction
 
 from flask import request, url_for
 from flask import current_app
+from flask import jsonify
+
 from belavoco_server import app
+from belavoco_server.app_uploader import send_pushnotification
 
 
 from datetime import date,timedelta
@@ -112,7 +115,13 @@ class NewUserView(ModelView):
         #print play_infos
         return self.render('admin/user_modal.html', user= this_user , audiofiles=audiofiles, play_infos = play_infos)
 
-
+    @expose('/send_push/<id>/<msg>')
+    def index(self,id,msg):
+        #return "Gut, so sei es, {}".format(User.select().where(User.id == id).get().user_name)
+        this_user = User.select().where(User.id == id).get()
+        message=msg
+        return jsonify( send_pushnotification.push_one(this_user,message) )
+         
 
 from belavoco_server import app
 

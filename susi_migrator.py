@@ -1,6 +1,6 @@
 #SuSi - SUper SImple Migration Skript
 
-from belavoco_server.models import User
+from belavoco_server.models import User, Audiofile, Audio_not_allowed
 from playhouse.migrate import *
 from peewee import *
 from belavoco_server.models import database
@@ -24,7 +24,15 @@ def migration_201118():
     susi_add_column(User.app_version)
     pass
 
+def un_allow_all_for_fu():
+    fu_user = User.select().where( User.user_email == 'pitch@fu-berlin.de' ).get()
+    for a in Audiofile.select(Audiofile):
+        Audio_not_allowed.create(user=fu_user,
+                                audiofile=a)
+    print "populated with denial"
+
+
 if __name__ == '__main__':
-    migration_201118()
-    
+    #migration_201118()
+    un_allow_all_for_fu()
     
