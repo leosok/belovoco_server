@@ -64,9 +64,23 @@ class User(BaseModel):
     def get_all_audios(self):
         """ Returns all not-blocked audiofiles for user """        
             
+        # These Audiofiles are Audio_not_allowed for "self"    
         blocked_audios = Audiofile.select().join(Audio_not_allowed).where(Audio_not_allowed.user == self)
-        #get all audios which are not in the blocked_audios
-        audios_not_blocked = Audiofile.select().where((Audiofile.id.not_in(blocked_audios)) and (Audiofile.is_active == True) ).order_by(Audiofile.upload_time.desc())
+        
+        # These Audiofiles are Audio_allowed for someone (most likely not the user "self")
+        for_others = Audiofile.select().join(Audio_allowed).where(Audio_allowed.user != self)
+        
+        # get all audios which are not blocked, for someone else or deactive
+        audios_not_blocked = Audiofile.select().where(Audiofile.id.not_in(blocked_audios) &
+                                                (Audiofile.id.not_in(for_others)) &
+                                                (Audiofile.is_active == True) ).\
+                                                order_by(Audiofile.upload_time.desc())
+        
+        """ print audios_not_blocked.count(),' minus ',  blocked_audios.count()
+        for b in audios_not_blocked:
+            print b.title
+        """
+        
         return audios_not_blocked
 
     def get_all_audios_as_json(self):
