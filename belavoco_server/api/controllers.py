@@ -96,7 +96,7 @@ def validate_user():
 
     #print User.select().where(User.user_email == email_to_validate).get()
 
-    if User.select().where(User.user_email == email_to_validate).count():
+    if User.select().where(User.user_email == email_to_validate).count() or (email_to_validate == app.config['SILENT_PUSH_MAIL']):
         return "Nice!"
     else:
         abort(404, "User not found in Database")

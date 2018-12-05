@@ -12,6 +12,8 @@ from belavoco_server.models import Audiofile, User
 from file_hashing import hash_file
 from send_pushnotification import push_gun
 
+from flask import current_app
+
 
 def create_audio_decription(audiofile):
     try:
@@ -62,7 +64,12 @@ def save_file_to_db(audiofile, request):
     
         
             new_audiofile.save
-            push_gun(new_audiofile)
+            
+
+            if creator_mail != current_app.config['SILENT_PUSH_MAIL']:    
+                push_gun(new_audiofile)
+            else:
+                print "(Upload) I was asked to keep SILENT."
         
         except peewee.IntegrityError as e:
             print e

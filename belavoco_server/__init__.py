@@ -25,6 +25,8 @@ app.config['APP_ROOT'] = APP_ROOT
 app.config['SEND_PUSH'] = True
 app.config['ADMIN_EMAILS'] = ["maxgraeber@gmail.com", "l.sokolov@mailbox.org"]
 
+app.config['SILENT_PUSH_MAIL'] = 'silent@push'
+
 bootstrap = Bootstrap(app)
 
 app.register_blueprint(api, url_prefix='/api')
