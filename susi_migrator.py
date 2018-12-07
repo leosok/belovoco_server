@@ -1,6 +1,6 @@
 #SuSi - SUper SImple Migration Skript
 
-from belavoco_server.models import User, Audiofile, Audio_not_allowed
+from belavoco_server.models import User, Audiofile, Audio_not_allowed, Comment
 from playhouse.migrate import *
 from peewee import *
 from belavoco_server.models import database
@@ -16,6 +16,8 @@ def susi_add_column(model_and_field):
         migrate(
             migrator.add_column(table_name, model_and_field.column_name, model_and_field.model._meta.fields[model_and_field.column_name])
         )
+
+        print "{} created!".format(table_name)
     
     except Exception as e: 
         print(e)
@@ -32,7 +34,20 @@ def un_allow_all_for_fu():
     print "populated with denial"
 
 
+def migration_071218():
+    #Adding Audiofile.times_commented
+    susi_add_column(Audiofile.times_commented)
+
+    for af in Audiofile.select(Audiofile):
+        af.times_commented = Comment.select().where(Comment.audiofile == af).count()
+        af.save()
+    
+
+
 if __name__ == '__main__':
     #migration_201118()
-    un_allow_all_for_fu()
+    #un_allow_all_for_fu()
+    migration_071218()
+
+    
     

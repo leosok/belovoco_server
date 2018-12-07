@@ -150,6 +150,7 @@ class Audiofile(BaseModel):
     length = CharField()
     times_played = IntegerField(default=0)
     times_liked = IntegerField(default=0)
+    times_commented = IntegerField(default=0)
     file_size =  IntegerField()
     file_url  =  CharField(default='')
     hash = CharField(default=0, unique=True)
@@ -172,6 +173,9 @@ class Audiofile(BaseModel):
                         audiofile = self,
                         content = content,
                         )
+
+        self.times_commented += 1
+        self.save()
 
     def get_comments(self):
         return Comment.select().where(Comment.audiofile == self).order_by(Comment.pub_date.desc())
@@ -304,6 +308,8 @@ class Comment(BaseModel):
             comment_delete_query = Comment.select().where((Comment.id == del_id) & (Comment.user == current_user ))            
             comment_to_delete = comment_delete_query.get()   
             comment_to_delete.delete_instance()
+            self.audiofile.times_commented -= 1
+            self.save()
             print "Here delete_comment. Deleting CommentID {} Content: {}".format(comment_to_delete.id,comment_to_delete.content)
         except IntegrityError:
             print "Comment (ID){} could not be deleted. Wrong user? Does not exist? {}".format(del_id)
