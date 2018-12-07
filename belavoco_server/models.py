@@ -306,10 +306,13 @@ class Comment(BaseModel):
     def delete_comment(del_id, current_user):
         try:
             comment_delete_query = Comment.select().where((Comment.id == del_id) & (Comment.user == current_user ))            
-            comment_to_delete = comment_delete_query.get()   
+            comment_to_delete = comment_delete_query.get() 
+
+            comment_to_delete.audiofile.times_commented -= 1
+            comment_to_delete.save()
+
             comment_to_delete.delete_instance()
-            self.audiofile.times_commented -= 1
-            self.save()
+            
             print "Here delete_comment. Deleting CommentID {} Content: {}".format(comment_to_delete.id,comment_to_delete.content)
         except IntegrityError:
             print "Comment (ID){} could not be deleted. Wrong user? Does not exist? {}".format(del_id)
