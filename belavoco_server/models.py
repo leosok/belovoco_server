@@ -309,7 +309,7 @@ class Comment(BaseModel):
             comment_to_delete = comment_delete_query.get() 
 
             comment_to_delete.audiofile.times_commented -= 1
-            comment_to_delete.save()
+            comment_to_delete.audiofile.save()
 
             comment_to_delete.delete_instance()
             
