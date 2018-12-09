@@ -178,7 +178,7 @@ class Audiofile(BaseModel):
         self.save()
 
     def get_comments(self):
-        return Comment.select().where(Comment.audiofile == self).order_by(Comment.pub_date.desc())
+        return Comment.select().where(Comment.audiofile == self).order_by(Comment.pub_date)
 
 
     def get_comments_json(self):
