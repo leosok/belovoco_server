@@ -91,7 +91,7 @@ class NewUserView(ModelView):
         return redirect(url, code=307)
 
     @expose('/modal/<id>')
-    def index(self,id):
+    def exp_modal(self,id):
         #return "Gut, so sei es, {}".format(User.select().where(User.id == id).get().user_name)
         this_user = User.select().where(User.id == id).get()
         #return Audiofile.select().where(Audiofile.creator == this_user).first().title
@@ -116,7 +116,7 @@ class NewUserView(ModelView):
         return self.render('admin/user_modal.html', user= this_user , audiofiles=audiofiles, play_infos = play_infos)
 
     @expose('/send_push/<id>/<msg>')
-    def index(self,id,msg):
+    def exp_send_push(self,id,msg):
         #return "Gut, so sei es, {}".format(User.select().where(User.id == id).get().user_name)
         this_user = User.select().where(User.id == id).get()
         message=msg
