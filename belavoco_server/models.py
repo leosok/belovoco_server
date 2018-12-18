@@ -90,7 +90,10 @@ class User(BaseModel):
             a_dict = model_to_dict(a) 
             #add a value "liked", audio is liked by self(user)
             a_dict['liked'] = a.is_liked(self)
-            #a_dict['times_liked'] = a.count_likes()
+            
+            #add progressStatus
+            a_dict['progressStatus'] = a.get_play_progress(self)
+            
             #print a_dict        
             all_records.append(a_dict)        
 
@@ -215,7 +218,7 @@ class Audiofile(BaseModel):
         
         #return Like.select(fn.COUNT()).where(Like.audiofile == self ).count()
 
-    def save_progress(self,current_user,progress):
+    def set_play_progress(self,current_user,progress):
         try:
             Play_Progress.create(
                     user=current_user,
@@ -230,6 +233,19 @@ class Audiofile(BaseModel):
             this_progress.progress = progress
             this_progress.save()
             return "updated"
+    
+    def get_play_progress(self,current_user):
+        #returns progress or 0
+        try:
+            this_progress = Play_Progress.select().where(Play_Progress.user==current_user,
+                                                        Play_Progress.audiofile==self).get()     
+            return this_progress.progress
+        except peewee.DoesNotExist:
+            #progress does not exist - file was not played yet by user or old version
+            return "0"
+            
+
+
 
 
     @staticmethod

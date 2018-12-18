@@ -206,8 +206,19 @@ def set_track_progress(hash_value,current_user=None):
     progress = request.json.get("progress")
     this_audio = Audiofile.get_by_hash(hash_value)
     
-    return this_audio.save_progress(current_user,progress)
+    return this_audio.set_play_progress(current_user,progress)
 
+""" 
+@api.route('/set/<string:hash_value>/progress', methods=['GET'])
+@authorize
+def get_track_progress(hash_value,current_user=None):
+    '''
+    {"progress":4.836230517}
+    '''
+    this_audio = Audiofile.get_by_hash(hash_value)
+    
+    return jsonify({"progress":this_audio.get_play_progress(current_user)})
+ """
 
 
 @api.route("/user", methods=['PUT'])
