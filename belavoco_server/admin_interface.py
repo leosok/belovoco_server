@@ -7,7 +7,7 @@ from flask_admin.actions import action
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin import Admin, AdminIndexView, expose
 from belavoco_server.models import  User, Comment
-from belavoco_server.models import Audiofile, Audio_not_allowed, Audio_allowed, Like, Play
+from belavoco_server.models import Audiofile, Audio_not_allowed, Audio_allowed, Like, Play, Play_Progress
 from flask_admin.contrib.peewee import ModelView
 from flask_admin.model.template import EndpointLinkRowAction, LinkRowAction
 
@@ -147,6 +147,7 @@ admin.add_view(Standard_Admin(Audio_allowed))
 admin.add_view(Standard_Admin(Like))
 admin.add_view(Standard_Admin(Play))
 admin.add_view(Standard_Admin(Comment))
+admin.add_view(Standard_Admin(Play_Progress))
 
 
 from os import path as op

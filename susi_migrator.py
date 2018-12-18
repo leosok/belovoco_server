@@ -1,6 +1,6 @@
 #SuSi - SUper SImple Migration Skript
 
-from belavoco_server.models import User, Audiofile, Audio_not_allowed, Comment
+from belavoco_server.models import User, Audiofile, Audio_not_allowed, Comment, Play_Progress
 from playhouse.migrate import *
 from peewee import *
 from belavoco_server.models import database
@@ -42,12 +42,17 @@ def migration_071218():
         af.times_commented = Comment.select().where(Comment.audiofile == af).count()
         af.save()
     
+def migration_181218():
+    #Adding Play_Progress
+    
+    database.create_tables([Play_Progress])
+
 
 
 if __name__ == '__main__':
     #migration_201118()
     #un_allow_all_for_fu()
-    migration_071218()
-
+    #migration_071218()
+    migration_181218()
     
     

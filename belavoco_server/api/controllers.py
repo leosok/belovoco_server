@@ -10,7 +10,7 @@ from flask import current_app as app
 from playhouse.shortcuts import model_to_dict
 
 
-from belavoco_server.models import Audiofile, User, Comment
+from belavoco_server.models import Audiofile, User, Comment, Play_Progress
 
 from flask import jsonify, abort
 from flask import send_file, request, Response
@@ -195,6 +195,18 @@ def set_like(hash_value,action=None,current_user=None):
 
     data = model_to_dict (this_audio)
     return json.dumps(data, indent=4, sort_keys=True, default=str)
+
+
+@api.route('/set/<string:hash_value>/progress', methods=['POST','PUT'])
+@authorize
+def set_track_progress(hash_value,current_user=None):
+    '''
+    {"progress":4.836230517}
+    '''
+    progress = request.json.get("progress")
+    this_audio = Audiofile.get_by_hash(hash_value)
+    
+    return this_audio.save_progress(current_user,progress)
 
 
 

@@ -215,6 +215,23 @@ class Audiofile(BaseModel):
         
         #return Like.select(fn.COUNT()).where(Like.audiofile == self ).count()
 
+    def save_progress(self,current_user,progress):
+        try:
+            Play_Progress.create(
+                    user=current_user,
+                    audiofile=self,
+                    progress = progress )
+            return "saved"
+        except IntegrityError:
+        #This progress did exist - so we UPDATE
+            this_progress = Play_Progress.select().where(Play_Progress.user==current_user,
+                        Play_Progress.audiofile==self).get()            
+            
+            this_progress.progress = progress
+            this_progress.save()
+            return "updated"
+
+
     @staticmethod
     def get_by_hash(hash):
         return Audiofile.select().where(Audiofile.hash == hash).get()
@@ -290,9 +307,6 @@ class Play(BaseModel):
         table_name = 'plays'
 
     
-
-#TODO: Comments
-
 class Comment(BaseModel):
     audiofile = ForeignKeyField(Audiofile, backref='comments')
     user = ForeignKeyField(User, backref='comments')
@@ -319,6 +333,28 @@ class Comment(BaseModel):
         
       
         return True
+
+
+class Play_Progress(BaseModel):
+    audiofile = ForeignKeyField(Audiofile, backref='play_progress')
+    user = ForeignKeyField(User, backref='play_progress')
+    progress = TextField()
+    #pub_date = DateTimeField(default=datetime.datetime.now)
+
+    class Meta:
+
+        indexes = (
+            # Specify a unique multi-column index on from/to-user.
+            # This is to have a unique contraint for User/Audio-Combination
+            (('audiofile', 'user'), True),
+        )
+
+        table_name = 'play_progress'
+   
+
+
+
+
 
 # simple utility function to create tables
 def create_tables():
